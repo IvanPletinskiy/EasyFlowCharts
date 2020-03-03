@@ -4,16 +4,15 @@ import com.handen.Context;
 import com.handen.strategies.DrawParallelogramStrategy;
 import com.handen.strategies.DrawTextStrategy;
 
-public class SoutNode extends SingleNode {
+public class ReturnNode extends SingleNode{
 
-    public SoutNode(String line) {
+    public ReturnNode(String line) {
         super(line);
     }
 
     @Override
     public String getText() {
-        String text = "sout(" + line.substring(line.indexOf("(") + 1, line.lastIndexOf(")")) + ")";
-        return text;
+        return null;
     }
 
     @Override
@@ -23,6 +22,7 @@ public class SoutNode extends SingleNode {
 
         context.setStrategy(new DrawTextStrategy(getText()));
         context.drawCurrentStrategy();
+
         return context;
     }
 }

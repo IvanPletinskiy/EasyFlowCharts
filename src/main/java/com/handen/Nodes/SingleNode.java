@@ -1,13 +1,13 @@
 package com.handen.Nodes;
 
-abstract class SingleNode extends AbstractNode {
+public abstract class SingleNode extends AbstractNode {
 
     public SingleNode(String line) {
         super(line);
     }
 
     @Override
-    int measureHeight() {
-        return 1;
+    public int measureHeight() {
+        return BLOCK_HEIGHT;
     }
 }

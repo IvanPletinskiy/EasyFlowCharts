@@ -1,6 +1,15 @@
 package com.handen.Nodes;
 
-abstract class AbstractNode {
+import com.handen.Context;
+
+public abstract class AbstractNode {
+
+    public static final int BLOCK_HEIGHT = 75;
+    public static final int BLOCK_WIDTH = 150;
+    public static final int ARROW_LENGTH = 40;
+    public static final int LOOP_BLOCK_OFFSET = (int) (BLOCK_WIDTH * 0.2);
+    public static final int THEN_ARROW_LENGTH = (int) (1.5 * BLOCK_WIDTH);
+
     protected String line;
 
     public AbstractNode(String line) {
@@ -9,5 +18,7 @@ abstract class AbstractNode {
 
     public abstract String getText();
 
-    abstract int measureHeight();
+    public abstract int measureHeight();
+
+    public abstract Context draw(Context context);
 }

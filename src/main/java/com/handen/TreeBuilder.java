@@ -1,83 +1,81 @@
 package com.handen;
 
+import com.handen.Nodes.AbstractNode;
+import com.handen.Nodes.MethodNodeGroup;
+import com.handen.Nodes.NodeGroup;
+import com.handen.Nodes.TwoBranchNodeGroup;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
 class TreeBuilder {
     private ArrayList<String> lines;
-    private ArrayList<String> staticFieldLines = new ArrayList<>();
-    private ArrayList<Node> methodNodes = new ArrayList<>();
+    private Stack<NodeGroup> openedNodeGroups;
+    private ArrayList<MethodNodeGroup> methodAbstractNodes;
+    private LineParser lineParser;
 
     public TreeBuilder(ArrayList<String> lines) {
         this.lines = lines;
+        openedNodeGroups = new Stack<>();
+        methodAbstractNodes = new ArrayList<>();
+        lineParser = new LineParser();
     }
 
-    public ArrayList<Node> getMethodTrees() {
-        ArrayList<Node> methodNodes = new ArrayList<>();
-        Node methodNode = null;
-        Stack<NodeTypes> openedNodes = new Stack<>();
+    public ArrayList<MethodNodeGroup> getMethodTrees() {
         for(int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            if(lineIsStaticField(line)) {
-                staticFieldLines.add(line);
-            }
-            if(lineIsMethod(line)) {
-                methodNode = new Node(line);
-                openedNodes.add(NodeTypes.METHOD);
-            }
-            else {
-                Node currentNode = null;
-                if(line.contains("}")) {
-                    NodeTypes lastOpenedNode = openedNodes.pop();
-                    currentNode = getCorrespondingClosingNode(lastOpenedNode, line);
+            String line = lines.get(i).trim();
+            if(isLineValid(line)) {
+                if(line.equals("}")) {
+                    if(i != lines.size() - 1 && !openedNodeGroups.isEmpty()) {
+                        if(openedNodeGroups.peek() instanceof TwoBranchNodeGroup) {
+                            TwoBranchNodeGroup twoBranchNodeGroup = (TwoBranchNodeGroup) openedNodeGroups.peek();
+                            String nextLine = lines.get(i + 1);
+                            if(isBracketClosingBranch(nextLine) && twoBranchNodeGroup.isFirstBranch()) {
+                                twoBranchNodeGroup.setIsFirstBranch(false);
+                            }
+                            else {
+                                closeNodeGroup();
+                            }
+                        }
+                        else {
+                            closeNodeGroup();
+                        }
+                    }
                 }
                 else {
-                    if(line.contains("{")) {
-                        currentNode = new Node(line);
-                        openedNodes.push(currentNode.getType());
-                    }
-                    else {
-                        currentNode = new Node(line, NodeTypes.STATEMENT);
-                    }
+                    addNode(line);
                 }
-
-                if(currentNode.getType() == NodeTypes.METHOD_END)
-                    methodNodes.add(methodNode);
-                if(methodNode != null)
-                    methodNode.recursivelyAddNode(currentNode);
             }
         }
-        return methodNodes;
+        return methodAbstractNodes;
     }
 
-    private Node getCorrespondingClosingNode(NodeTypes lastOpenedNode, String line) {
-        switch(lastOpenedNode) {
-            case LOOP: {
-                return new Node(line, NodeTypes.LOOP_END);
+    private void addNode(String line) {
+        AbstractNode node = lineParser.nextNode(line);
+        if(node instanceof NodeGroup) {
+            if(!openedNodeGroups.isEmpty()) {
+                openedNodeGroups.peek().addNode(node);
             }
-            case METHOD: {
-                return new Node("конец", NodeTypes.METHOD_END);
-            }
-            case IF: {
-                return new Node(line, NodeTypes.THEN_END);
-            }
-            case ELSE: {
-                return new Node(line, NodeTypes.ELSE_END);
-            }
-            default: return new Node("getCorrespondingClosingNode", NodeTypes.EMPTY);
+            openedNodeGroups.push((NodeGroup) node);
+        }
+        else {
+            openedNodeGroups.peek().addNode(node);
+        }
+    }
+
+    private boolean isBracketClosingBranch(String nextLine) {
+        return (nextLine.contains("else ") || nextLine.contains("catch"));
+    }
+
+    private void closeNodeGroup() {
+        NodeGroup endedNodeGroup = openedNodeGroups.pop();
+        if(openedNodeGroups.isEmpty()) {
+            methodAbstractNodes.add((MethodNodeGroup) endedNodeGroup);
         }
     }
 
     private boolean isLineValid(String line) {
-        return !line.contains("import") &&
-                !line.trim().isEmpty();
-    }
-
-    private static boolean lineIsMethod(String line) {
-        return (line.contains("public") || line.contains("private") && (line.contains("static") || line.contains("void")));
-    }
-
-    private static boolean lineIsStaticField(String line) {
-        return (line.contains("private") || line.contains("public")) && line.contains(";");
+        return !line.contains("import") && !line.contains(" class ") && !line.contains("package") &&
+                !line.isEmpty();
     }
 }

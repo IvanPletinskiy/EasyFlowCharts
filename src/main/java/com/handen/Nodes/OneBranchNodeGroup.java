@@ -3,7 +3,7 @@ package com.handen.Nodes;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class OneBranchNodeGroup extends AbstractNode {
+public abstract class OneBranchNodeGroup extends NodeGroup {
 
     private ArrayList<AbstractNode> children = new ArrayList<>();
 
@@ -11,22 +11,26 @@ abstract class OneBranchNodeGroup extends AbstractNode {
         super(line);
     }
 
-    List<AbstractNode> getChildren() {
-        return children;
+    @Override
+    public void addNode(AbstractNode node) {
+        children.add(node);
     }
 
-    void addNode(AbstractNode node) {
-        children.add(node);
+    List<AbstractNode> getChildren() {
+        return children;
     }
 
     abstract String getClosingBlockText();
 
     @Override
-    int measureHeight() {
+    public int measureHeight() {
         int sum = 0;
         for(AbstractNode child : getChildren()) {
             sum += child.measureHeight();
         }
-        return sum;
+        if(children.size() > 0) {
+            sum += (children.size() - 1) * ARROW_LENGTH;
+        }
+        return BLOCK_HEIGHT + ARROW_LENGTH + sum +  ARROW_LENGTH + BLOCK_HEIGHT;
     }
 }
