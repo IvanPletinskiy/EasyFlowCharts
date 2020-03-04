@@ -1,6 +1,7 @@
 package com.handen;
 
 import com.handen.Nodes.MethodNodeGroup;
+import com.handen.strategies.DrawTextStrategy;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -20,6 +21,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
@@ -69,10 +71,10 @@ public class DrawFlowChartsApplication extends Application {
             int height = method.measureHeight();
             int side = height + 200;
             Canvas canvas = new Canvas(side, side);
-
             GraphicsContext gc = canvas.getGraphicsContext2D();
             gc.setStroke(Color.BLACK);
             gc.setFill(Color.BLACK);
+            gc.setFont(Font.font("Verdana", DrawTextStrategy.FONT_SIZE));
             gc.setLineWidth(2);
             gc.setTextAlign(TextAlignment.CENTER);
             gc.setTextBaseline(VPos.CENTER);
