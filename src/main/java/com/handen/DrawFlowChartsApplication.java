@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 
 public class DrawFlowChartsApplication extends Application {
 
-    private static String path = "C:\\Projects\\Block3\\src\\com\\handen\\Main.java";
+    private static String path = "C:\\Projects\\Lab4.2\\src\\com\\handen\\Main.java";
     private static String savePath = "C:\\Users\\hande\\Desktop\\flowChart";
 
     public static void main(String[] args) {

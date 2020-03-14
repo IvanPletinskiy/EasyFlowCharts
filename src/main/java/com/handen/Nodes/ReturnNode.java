@@ -13,7 +13,7 @@ public class ReturnNode extends SingleNode{
     @Override
     public String getText() {
 
-        return line.trim().substring(line.indexOf("return") + 6,).replace(";", "");
+        return line.trim().substring(line.indexOf("return") + 6).replace(";", "");
     }
 
     @Override
