@@ -22,6 +22,8 @@ class TreeBuilder {
     }
 
     public ArrayList<MethodNodeGroup> getMethodTrees() {
+        addAllMethodNames();
+
         for(int i = 0; i < lines.size(); i++) {
             String line = lines.get(i).trim();
             if(isLineValid(line)) {
@@ -48,6 +50,18 @@ class TreeBuilder {
             }
         }
         return methodAbstractNodes;
+    }
+
+    private void addAllMethodNames() {
+        for(String line : lines) {
+            line = line.trim();
+            if(isLineValid(line) && !line.contains("}")) {
+                AbstractNode node = lineParser.nextNode(line);
+                if(node instanceof MethodNodeGroup) {
+                    lineParser.addMethodName(node.getText());
+                }
+            }
+        }
     }
 
     private void addNode(String line) {

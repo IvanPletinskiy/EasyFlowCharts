@@ -6,9 +6,12 @@ import com.handen.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Context {
+
     private GraphicsContext gc;
     private DrawStrategy strategy;
     private Point currentPoint;
+
+    public static final int PAGE_HEIGHT = 900;
 
     public Context(GraphicsContext gc) {
         this.gc = gc;
@@ -29,5 +32,9 @@ public class Context {
 
     public void setCurrentPoint(Point currentPoint) {
         this.currentPoint = new Point(currentPoint);
+    }
+
+    public void goToNextPage(int page) {
+        currentPoint = new Point(page * (PAGE_HEIGHT / 2), 50);
     }
 }

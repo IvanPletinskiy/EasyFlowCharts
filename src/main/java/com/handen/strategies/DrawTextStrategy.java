@@ -13,7 +13,7 @@ public class DrawTextStrategy implements DrawStrategy {
 
     private static final int MAX_SYMBOLS_IN_LINE = 20;
     private static final int LINE_MARGIN = 2;
-    public static final int FONT_SIZE = 12;
+    public static final int FONT_SIZE = 11;
     private String text;
 
     public DrawTextStrategy(String text) {
@@ -46,7 +46,8 @@ public class DrawTextStrategy implements DrawStrategy {
                     else {
                         if(dotIdx == -1) {
                             dividerIndex = spaceIdx;
-                        }else {
+                        }
+                        else {
                             if(spaceIdx == -1) {
                                 dividerIndex = dotIdx;
                             }
@@ -54,7 +55,6 @@ public class DrawTextStrategy implements DrawStrategy {
                                 dividerIndex = Math.min(dotIdx, spaceIdx);
                             }
                         }
-
                     }
                     if(dividerIndex > 0) {
                         lines.add(text.substring(0, dividerIndex));

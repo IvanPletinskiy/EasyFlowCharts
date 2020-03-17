@@ -10,7 +10,11 @@ import com.handen.Nodes.SoutNode;
 import com.handen.Nodes.StatementNode;
 import com.handen.Nodes.TryNodeGroup;
 
+import java.util.ArrayList;
+
 class LineParser {
+
+    private ArrayList<String> methodNames = new ArrayList<>();
 
     public AbstractNode nextNode(String line) {
         if(lineIsMethod(line)) {
@@ -59,7 +63,13 @@ class LineParser {
     }
 
     private boolean lineIsMethodCall(String line) {
-        return line.contains("(") && line.contains(");") && !line.contains("printStackTrace") && !line.contains("=");
+        boolean isMethodCall = line.contains("(") && line.contains(");") && line.contains("=");
+        if(isMethodCall) {
+            final String methodName = line.substring(line.indexOf("=") + 1, line.lastIndexOf("(")).trim();
+            isMethodCall = methodNames.stream().anyMatch(name -> name.contains(methodName));
+        }
+
+        return isMethodCall;
     }
 
     private boolean lineIsReturn(String line ) {
@@ -84,6 +94,10 @@ class LineParser {
 
     private boolean lineIsStatement(String line) {
         return line.contains(";");
+    }
+
+    public void addMethodName(String methodName) {
+        methodNames.add(methodName);
     }
 /*
     private boolean lineIsStaticField(String line) {

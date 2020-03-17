@@ -2,10 +2,15 @@ package com.handen.Nodes;
 
 import com.handen.Context;
 import com.handen.strategies.DrawArrowStrategy;
+import com.handen.strategies.DrawCircleStrategy;
 import com.handen.strategies.DrawOvalStrategy;
 import com.handen.strategies.DrawTextStrategy;
 
+import static com.handen.Context.PAGE_HEIGHT;
+
 public class MethodNodeGroup extends OneBranchNodeGroup {
+
+    int page = 0;
 
     public MethodNodeGroup(String line) {
         super(line);
@@ -34,10 +39,18 @@ public class MethodNodeGroup extends OneBranchNodeGroup {
         context.setStrategy(new DrawArrowStrategy());
         context.drawCurrentStrategy();
 
+        int height = 0;
+
         for(AbstractNode node: getChildren()) {
+            if(height + node.measureHeight()  + ARROW_LENGTH + BLOCK_HEIGHT> PAGE_HEIGHT) {
+                drawTransition(context);
+                height = 0;
+            }
             context = node.draw(context);
             context.setStrategy(new DrawArrowStrategy());
             context.drawCurrentStrategy();
+            height += node.measureHeight();
+            height += ARROW_LENGTH;
         }
 
         context.setStrategy(new DrawOvalStrategy());
@@ -47,5 +60,19 @@ public class MethodNodeGroup extends OneBranchNodeGroup {
         context.drawCurrentStrategy();
 
         return context;
+    }
+
+    private void drawTransition(Context context) {
+        page++;
+
+        context.setStrategy(new DrawCircleStrategy());
+        context.drawCurrentStrategy();
+
+        context.goToNextPage(page);
+
+        context.setStrategy(new DrawCircleStrategy());
+        context.drawCurrentStrategy();
+        context.setStrategy(new DrawArrowStrategy());
+        context.drawCurrentStrategy();
     }
 }

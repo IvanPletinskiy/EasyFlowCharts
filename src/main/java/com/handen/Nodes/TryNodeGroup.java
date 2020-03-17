@@ -37,6 +37,11 @@ public class TryNodeGroup extends TwoBranchNodeGroup {
 
     @Override
     public Context draw(Context context) {
+        for(AbstractNode node: super.getFirstBranch()) {
+            context = node.draw(context);
+            context.setStrategy(new DrawArrowStrategy());
+            context.drawCurrentStrategy();
+        }
 
         Point diamondPoint = new Point(context.getCurrentPoint());
 
