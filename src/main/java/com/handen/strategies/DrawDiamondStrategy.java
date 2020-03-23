@@ -21,12 +21,12 @@ public class DrawDiamondStrategy implements DrawStrategy{
         gc.strokeLine(startX + BLOCK_WIDTH  / 2, endY, startX, startY);
 
         //Draw yes above right arrow
-        int yesX = (int) (p.x + BLOCK_WIDTH * 1.3);
+        int yesX = (int) (p.x + BLOCK_WIDTH * 1.2);
         int yesY = (int) (p.y + BLOCK_HEIGHT * 0.3);
         gc.fillText("да", yesX, yesY, BLOCK_WIDTH);
         //Draw no to the left of bottom arrow
         int noX = (int) (p.x + BLOCK_WIDTH * 0.4);
-        int noY = (int) (p.y + BLOCK_HEIGHT * 1.3);
+        int noY = (int) (p.y + BLOCK_HEIGHT * 1.2);
         gc.fillText("нет", noX, noY, BLOCK_WIDTH);
         return p;
     }

@@ -89,7 +89,7 @@ class TreeBuilder {
     }
 
     private boolean isLineValid(String line) {
-        return !line.contains("import") && !line.contains(" class ") && !line.contains("package") &&
+        return !line.contains("import") && !line.contains(" class ") && !line.contains("package") && !line.contains("@") &&
                 !line.isEmpty();
     }
 }

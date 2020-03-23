@@ -4,8 +4,8 @@ import com.handen.Context;
 
 public abstract class AbstractNode {
 
-    public static final int BLOCK_HEIGHT = 60;
-    public static final int BLOCK_WIDTH = 120;
+    public static final int BLOCK_HEIGHT = 75;
+    public static final int BLOCK_WIDTH = 150;
     public static final int ARROW_LENGTH = 25;
     public static final int LOOP_BLOCK_OFFSET = (int) (BLOCK_WIDTH * 0.2);
     public static final int THEN_ARROW_LENGTH = BLOCK_WIDTH;

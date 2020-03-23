@@ -11,7 +11,7 @@ public class Context {
     private DrawStrategy strategy;
     private Point currentPoint;
 
-    public static final int PAGE_HEIGHT = 900;
+    public static final int PAGE_HEIGHT = 1200;
 
     public Context(GraphicsContext gc) {
         this.gc = gc;

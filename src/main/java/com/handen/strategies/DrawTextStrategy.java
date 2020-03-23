@@ -13,7 +13,7 @@ public class DrawTextStrategy implements DrawStrategy {
 
     private static final int MAX_SYMBOLS_IN_LINE = 20;
     private static final int LINE_MARGIN = 2;
-    public static final int FONT_SIZE = 11;
+    public static final int FONT_SIZE = 12;
     private String text;
 
     public DrawTextStrategy(String text) {
