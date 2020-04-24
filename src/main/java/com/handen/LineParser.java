@@ -89,7 +89,7 @@ class LineParser {
     }
 
     private boolean lineIsMethod(String line) {
-        return (line.contains("public") || line.contains("private") && (line.contains("static") || line.contains("void")));
+        return line.contains("{") && (line.contains("public") || line.contains("private") || line.contains("static") || line.contains("void") || line.contains("boolean"));
     }
 
     private boolean lineIsStatement(String line) {

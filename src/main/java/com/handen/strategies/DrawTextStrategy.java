@@ -11,9 +11,9 @@ import static com.handen.Nodes.AbstractNode.BLOCK_WIDTH;
 
 public class DrawTextStrategy implements DrawStrategy {
 
-    private static final int MAX_SYMBOLS_IN_LINE = 20;
+    private static final int MAX_SYMBOLS_IN_LINE = 25;
     private static final int LINE_MARGIN = 2;
-    public static final int FONT_SIZE = 12;
+    public static final int FONT_SIZE = 28;
     private String text;
 
     public DrawTextStrategy(String text) {
@@ -35,7 +35,7 @@ public class DrawTextStrategy implements DrawStrategy {
                     //Нет пробелов до максимального количества символов в строке, найдём наименьший после этого
                     int spaceIdx = text.indexOf(" ", MAX_SYMBOLS_IN_LINE - 1);
                     int dotIdx = text.indexOf(".", MAX_SYMBOLS_IN_LINE);
-                    if(spaceIdx > 0 && spaceIdx < dotIdx) {
+                    if(spaceIdx > 0 && spaceIdx < dotIdx && dividerIndex >= 0) {
                         lines.add(text.substring(0, dividerIndex));
                         text = text.substring(dividerIndex);
                     }

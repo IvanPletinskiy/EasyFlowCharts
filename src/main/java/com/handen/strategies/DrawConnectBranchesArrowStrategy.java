@@ -10,8 +10,8 @@ import static com.handen.Nodes.AbstractNode.THEN_ARROW_LENGTH;
 
 public class DrawConnectBranchesArrowStrategy implements DrawStrategy {
 
-    public static int ARROW_LENGTH_X = 8;
-    public static int ARROW_LENGTH_Y = 4;
+    public static int ARROW_LENGTH_X = 16;
+    public static int ARROW_LENGTH_Y = 8;
 
     @Override
     public Point draw(GraphicsContext gc, Point p) {
