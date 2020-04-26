@@ -29,6 +29,8 @@ public class DrawFlowChartsApplication extends Application {
 
     private static String path = "C:\\Projects\\hellofx\\src\\main\\java\\com\\handen\\lab\\controller\\MainController.java";
     private static String savePath = "C:\\Users\\hande\\Desktop\\flowChart";
+    private static int LIST_WIDTH = 2480;
+    private static int LIST_HEIGHT = 3508;
 
     public static void main(String[] args) {
         launch(args);
@@ -70,7 +72,8 @@ public class DrawFlowChartsApplication extends Application {
         for(MethodNodeGroup method : methodNodes) {
             int height = method.measureHeight();
             int side = height + 200;
-            Canvas canvas = new Canvas(side, side);
+            //Canvas canvas = new Canvas(side, side);
+            Canvas canvas = new Canvas(LIST_WIDTH, LIST_HEIGHT);
             GraphicsContext gc = canvas.getGraphicsContext2D();
             gc.setStroke(Color.BLACK);
             gc.setFill(Color.BLACK);
