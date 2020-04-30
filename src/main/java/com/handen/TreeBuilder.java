@@ -8,17 +8,24 @@ import com.handen.Nodes.TwoBranchNodeGroup;
 import java.util.ArrayList;
 import java.util.Stack;
 
-class TreeBuilder {
+public class TreeBuilder {
     private ArrayList<String> lines;
     private Stack<NodeGroup> openedNodeGroups;
     private ArrayList<MethodNodeGroup> methodAbstractNodes;
     private LineParser lineParser;
-
+/*
     public TreeBuilder(ArrayList<String> lines) {
         this.lines = lines;
         openedNodeGroups = new Stack<>();
         methodAbstractNodes = new ArrayList<>();
         lineParser = new LineParser();
+    }
+
+
+ */
+
+    public TreeBuilder() {
+
     }
 
     public ArrayList<MethodNodeGroup> getMethodTrees() {
@@ -89,7 +96,7 @@ class TreeBuilder {
     }
 
     private boolean isLineValid(String line) {
-        return !line.contains("import") && !line.contains(" class ") && !line.contains("package") && !line.contains("@") &&
-                !line.isEmpty() && !line.contains("@");
+        return !line.contains("import") && !line.contains("class ") && !line.contains("package") && !line.contains("@") &&
+                !line.isEmpty() && !line.contains("@") && !line.contains("interface") && !(line.contains("void") && line.contains(";"));
     }
 }

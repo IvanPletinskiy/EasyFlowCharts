@@ -63,9 +63,15 @@ class LineParser {
     }
 
     private boolean lineIsMethodCall(String line) {
-        boolean isMethodCall = line.contains("(") && line.contains(");") && line.contains("=");
+        boolean isMethodCall = line.contains("(") && line.contains(");");
         if(isMethodCall) {
-            final String methodName = line.substring(line.indexOf("=") + 1, line.lastIndexOf("(")).trim();
+            String methodName;
+            if(line.contains("=")) {
+                methodName = line.substring(line.indexOf("=") + 1, line.lastIndexOf("(")).trim();
+            }
+            else {
+                methodName = line.trim().substring(0, line.lastIndexOf("("));
+            }
             isMethodCall = methodNames.stream().anyMatch(name -> name.contains(methodName));
         }
 

@@ -1,6 +1,8 @@
-package com.handen;
+package com.handen.mainScreen;
 
+import com.handen.Context;
 import com.handen.Nodes.MethodNodeGroup;
+import com.handen.TreeBuilder;
 import com.handen.strategies.DrawTextStrategy;
 
 import java.awt.image.BufferedImage;
@@ -14,6 +16,7 @@ import javax.imageio.ImageIO;
 
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -27,7 +30,7 @@ import javafx.stage.Stage;
 
 public class DrawFlowChartsApplication extends Application {
 
-    private static String path = "C:\\Projects\\hellofx\\src\\main\\java\\com\\handen\\lab\\controller\\MainController.java";
+    private static String path = "C:\\Projects\\Lab_6_2\\src\\com\\handen\\Main.java";
     private static String savePath = "C:\\Users\\hande\\Desktop\\flowChart";
     private static int LIST_WIDTH = 2480;
     private static int LIST_HEIGHT = 3508;
@@ -38,13 +41,23 @@ public class DrawFlowChartsApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(App.class.getResource("main_layout.fxml"));
+        Scene scene = new Scene(loader.load());
+        MainController controller = loader.getController();
+        controller.setStage(stage);
+        stage.setTitle("Ivan Pletinski 951008");
+        stage.setScene(scene);
+        stage.show();
+
         clearOutputDirectory();
-        primaryStage.setTitle("EasyFlowCharts");
+        primaryStage.setTitle("EasyFlowCharts Ivan Pletinskiy 951008");
         Group root = new Group();
         ArrayList<String> lines = parseFile(new File(path));
         ArrayList<MethodNodeGroup> methodNodes = new TreeBuilder(lines).getMethodTrees();
-        ArrayList<Canvas> canvases = drawMethods(methodNodes);
-        root.getChildren().add(canvases.get(0));
+        Canvas canvas = drawMethods(methodNodes);
+        root.getChildren().add(canvas);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
@@ -67,13 +80,14 @@ public class DrawFlowChartsApplication extends Application {
         return lines;
     }
 
-    private static ArrayList<Canvas> drawMethods(ArrayList<MethodNodeGroup> methodNodes) {
-        ArrayList<Canvas> ret = new ArrayList<>();
+    private static Canvas drawMethods(ArrayList<MethodNodeGroup> methodNodes) {
+        Canvas firstCanvas = null;
         for(MethodNodeGroup method : methodNodes) {
             int height = method.measureHeight();
             int side = height + 200;
             //Canvas canvas = new Canvas(side, side);
             Canvas canvas = new Canvas(LIST_WIDTH, LIST_HEIGHT);
+
             GraphicsContext gc = canvas.getGraphicsContext2D();
             gc.setStroke(Color.BLACK);
             gc.setFill(Color.BLACK);
@@ -83,12 +97,15 @@ public class DrawFlowChartsApplication extends Application {
             gc.setTextBaseline(VPos.CENTER);
 
             method.draw(new Context(gc));
-            ret.add(canvas);
             saveCanvasToMemory(canvas, method.getText());
+            if(firstCanvas == null) {
+                firstCanvas = canvas;
+            }
+            canvas = null;
         }
-        return ret;
+        return firstCanvas;
     }
-
+/*
     private static void saveCanvasToMemory(Canvas canvas, String fileName) {
         File file = new File(savePath, fileName + ".png");
         WritableImage image = canvas.snapshot(null, null);
@@ -100,4 +117,6 @@ public class DrawFlowChartsApplication extends Application {
             e.printStackTrace();
         }
     }
+
+ */
 }
