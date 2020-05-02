@@ -1,5 +1,5 @@
-import com.handen.Nodes.MethodCallNode;
-import com.handen.Nodes.StatementNode;
+import com.handen.easyFlowCharts.Nodes.MethodCallNode;
+import com.handen.easyFlowCharts.Nodes.StatementNode;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
