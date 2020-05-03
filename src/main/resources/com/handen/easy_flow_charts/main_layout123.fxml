@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handen.easy_flow_charts.mainScreen.MainController">
+
+    <MenuBar>
+        <Menu text="About">
+            <MenuItem fx:id="menu_about" onAction="#OnMenuAboutClicked" text="About">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+        </Menu>
+        <Menu text="Help">
+            <MenuItem fx:id="menu_help" onAction="#OnMenuHelpClicked" text="Help">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+        </Menu>
+    </MenuBar>
+    <VBox prefHeight="700.0" prefWidth="700.0">
+        <padding>
+            <Insets left="50.0" right="50.0" />
+        </padding>
+        <Label text="Enter path of folder with source files:">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <VBox.margin>
+                <Insets top="200.0" />
+            </VBox.margin>
+        </Label>
+        <HBox prefHeight="100.0" prefWidth="200.0">
+            <TextField fx:id="source_text_area" prefHeight="30.0" prefWidth="600.0">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            <HBox.margin>
+               <Insets top="7.0" />
+            </HBox.margin>
+            </TextField>
+            <Button mnemonicParsing="false" onAction="#onSourceButtonClicked" style="-fx-background-color: transparent;">
+                <graphic>
+                    <ImageView fitHeight="48.0" fitWidth="48.0">
+                        <Image url="ic_folder.png" />
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+        <Label fx:id="source_error_text" textFill="#f44336" visible="false">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <CheckBox fx:id="save_flowchart_checkbox" mnemonicParsing="false" onMouseClicked="#onSaveCheckedChanged" selected="true" text="Save flowchart to memory">
+            <VBox.margin>
+                <Insets top="50.0" />
+            </VBox.margin>
+            <font>
+                <Font size="14.0" />
+            </font>
+        </CheckBox>
+        <Label layoutX="60.0" layoutY="10.0" text="Enter save directory path:">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <VBox.margin>
+                <Insets top="15.0" />
+            </VBox.margin>
+        </Label>
+        <HBox prefHeight="100.0" prefWidth="200.0">
+            <TextField fx:id="save_text_area" layoutX="60.0" layoutY="252.0" prefHeight="39.0" prefWidth="547.0">
+                <font>
+                    <Font size="18.0" />
+                </font>
+                <HBox.margin>
+                    <Insets top="7.0" />
+                </HBox.margin>
+            </TextField>
+            <Button mnemonicParsing="false" onAction="#onSaveButtonClicked" style="-fx-background-color: transparent;">
+                <graphic>
+                    <ImageView fitHeight="48.0" fitWidth="48.0">
+                        <Image url="ic_folder.png" />
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+        <Label fx:id="save_error_text" layoutX="60.0" layoutY="292.0" textFill="#f44336" visible="false">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <Button fx:id="create_button" alignment="CENTER" mnemonicParsing="false" onAction="#onCreateButtonClicked" style="-fx-background-color: #4caf50;" text="Create flowchart!" textFill="WHITE">
+            <VBox.margin>
+                <Insets left="200.0" top="40.0" />
+            </VBox.margin>
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
+        <HBox prefHeight="27.0" prefWidth="600.0" visible="false">
+            <ProgressBar fx:id="progress_bar" prefHeight="18.0" prefWidth="554.0" progress="0.4">
+                <HBox.margin>
+                    <Insets top="4.0" />
+                </HBox.margin>
+            </ProgressBar>
+            <Label fx:id="progress_percent_label" text="40%">
+                <font>
+                    <Font size="18.0" />
+                </font>
+                <HBox.margin>
+                    <Insets left="10.0" />
+                </HBox.margin>
+            </Label>
+            <VBox.margin>
+                <Insets top="30.0" />
+            </VBox.margin>
+        </HBox>
+        <Label fx:id="progress_description_label" layoutX="60.0" layoutY="397.0" text="Main.java" visible="false">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+    </VBox>
+</AnchorPane>
