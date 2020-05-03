@@ -1,12 +1,12 @@
 package com.handen.easyFlowCharts.Nodes;
 
-import com.handen.easyFlowCharts.Context;
+import com.handen.easyFlowCharts.flowchart.Context;
 import com.handen.easyFlowCharts.strategies.DrawParallelogramStrategy;
 import com.handen.easyFlowCharts.strategies.DrawTextStrategy;
 
-public class SoutNode extends SingleNode {
+public class PrintNode extends SingleNode {
 
-    public SoutNode(String line) {
+    public PrintNode(String line) {
         super(line);
     }
 

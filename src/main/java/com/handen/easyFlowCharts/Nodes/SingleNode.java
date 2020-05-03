@@ -1,5 +1,7 @@
 package com.handen.easyFlowCharts.Nodes;
 
+import com.handen.easyFlowCharts.flowchart.DrawConstants;
+
 public abstract class SingleNode extends AbstractNode {
 
     public SingleNode(String line) {
@@ -8,6 +10,11 @@ public abstract class SingleNode extends AbstractNode {
 
     @Override
     public int measureHeight() {
-        return AbstractNode.BLOCK_HEIGHT;
+        return DrawConstants.BLOCK_HEIGHT;
+    }
+
+    @Override
+    public int measureWidth() {
+        return DrawConstants.BLOCK_WIDTH;
     }
 }

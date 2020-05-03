@@ -5,30 +5,32 @@ import com.handen.easyFlowCharts.Nodes.MethodNodeGroup;
 import com.handen.easyFlowCharts.Nodes.NodeGroup;
 import com.handen.easyFlowCharts.Nodes.TwoBranchNodeGroup;
 
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 public class TreeBuilder {
-    private ArrayList<String> lines;
+    private File file;
+    private List<String> lines;
     private Stack<NodeGroup> openedNodeGroups;
-    private ArrayList<MethodNodeGroup> methodAbstractNodes;
+    private List<MethodNodeGroup> methodAbstractNodes;
     private LineParser lineParser;
-/*
-    public TreeBuilder(ArrayList<String> lines) {
-        this.lines = lines;
+
+    public TreeBuilder(File file) {
+        this.file = file;
+        this.lines = new LinkedList<>();
         openedNodeGroups = new Stack<>();
-        methodAbstractNodes = new ArrayList<>();
+        methodAbstractNodes = new LinkedList<>();
         lineParser = new LineParser();
     }
 
-
- */
-
-    public TreeBuilder() {
-
-    }
-
-    public ArrayList<MethodNodeGroup> getMethodTrees() {
+    public List<MethodNodeGroup> parseFile() {
+        readFile();
         addAllMethodNames();
 
         for(int i = 0; i < lines.size(); i++) {
@@ -57,6 +59,33 @@ public class TreeBuilder {
             }
         }
         return methodAbstractNodes;
+    }
+
+    private void readLines() throws IOException {
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader(file);
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if(fileReader != null) {
+            BufferedReader reader = new BufferedReader(fileReader);
+            String s;
+            while((s = reader.readLine()) != null) {
+                lines.add(s);
+            }
+        }
+    }
+
+    private void readFile() {
+        try {
+            readLines();
+        }
+        catch(IOException e) {
+            System.err.println("Cannot read from file: " + file.toString());
+            e.printStackTrace();
+        }
     }
 
     private void addAllMethodNames() {

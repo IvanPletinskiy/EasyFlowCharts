@@ -1,4 +1,4 @@
-package com.handen.easyFlowCharts;
+package com.handen.easyFlowCharts.flowchart;
 
 import com.handen.easyFlowCharts.strategies.DrawStrategy;
 import com.handen.easyFlowCharts.utils.Point;
@@ -11,11 +11,9 @@ public class Context {
     private DrawStrategy strategy;
     private Point currentPoint;
 
-    public static final int PAGE_HEIGHT = 2400;
-
-    public Context(GraphicsContext gc) {
+    public Context(GraphicsContext gc, int currentX, int currentY) {
         this.gc = gc;
-        currentPoint = new Point(50, 50);
+        currentPoint = new Point(currentX, currentY);
     }
 
     public void setStrategy(DrawStrategy strategy) {
@@ -34,7 +32,8 @@ public class Context {
         this.currentPoint = new Point(currentPoint);
     }
 
+    //TODO перенести логику в FlowchartDrawer
     public void goToNextPage(int page) {
-        currentPoint = new Point(page * (PAGE_HEIGHT / 2), 50);
+        currentPoint = new Point(page * (DrawConstants.LIST_HEIGHT / 2), 50);
     }
 }

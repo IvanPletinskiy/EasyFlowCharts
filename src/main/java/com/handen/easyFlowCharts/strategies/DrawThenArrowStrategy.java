@@ -4,10 +4,10 @@ import com.handen.easyFlowCharts.utils.Point;
 
 import javafx.scene.canvas.GraphicsContext;
 
-import static com.handen.easyFlowCharts.Nodes.AbstractNode.ARROW_LENGTH;
-import static com.handen.easyFlowCharts.Nodes.AbstractNode.BLOCK_HEIGHT;
-import static com.handen.easyFlowCharts.Nodes.AbstractNode.BLOCK_WIDTH;
-import static com.handen.easyFlowCharts.Nodes.AbstractNode.THEN_ARROW_LENGTH;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.ARROW_LENGTH;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_HEIGHT;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_WIDTH;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.THEN_ARROW_LENGTH;
 
 public class DrawThenArrowStrategy implements DrawStrategy {
     @Override

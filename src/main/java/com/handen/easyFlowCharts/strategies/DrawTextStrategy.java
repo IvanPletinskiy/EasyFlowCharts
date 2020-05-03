@@ -1,19 +1,17 @@
 package com.handen.easyFlowCharts.strategies;
 
+import com.handen.easyFlowCharts.flowchart.DrawConstants;
 import com.handen.easyFlowCharts.utils.Point;
 
 import java.util.ArrayList;
 
 import javafx.scene.canvas.GraphicsContext;
 
-import static com.handen.easyFlowCharts.Nodes.AbstractNode.BLOCK_HEIGHT;
-import static com.handen.easyFlowCharts.Nodes.AbstractNode.BLOCK_WIDTH;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_HEIGHT;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_WIDTH;
 
 public class DrawTextStrategy implements DrawStrategy {
 
-    private static final int MAX_SYMBOLS_IN_LINE = 25;
-    private static final int LINE_MARGIN = 2;
-    public static final int FONT_SIZE = 28;
     private String text;
 
     public DrawTextStrategy(String text) {
@@ -25,16 +23,16 @@ public class DrawTextStrategy implements DrawStrategy {
         ArrayList<String> lines = new ArrayList<>();
         if(text != null) {
             boolean isDividable = true;
-            while(text.length() > MAX_SYMBOLS_IN_LINE && isDividable) {
-                int dividerIndex = Math.max(text.lastIndexOf(" ", MAX_SYMBOLS_IN_LINE - 1), text.lastIndexOf(".", MAX_SYMBOLS_IN_LINE));
+            while(text.length() > DrawConstants.MAX_SYMBOLS_IN_LINE && isDividable) {
+                int dividerIndex = Math.max(text.lastIndexOf(" ", DrawConstants.MAX_SYMBOLS_IN_LINE - 1), text.lastIndexOf(".", DrawConstants.MAX_SYMBOLS_IN_LINE));
                 if(dividerIndex > 0) {
                     lines.add(text.substring(0, dividerIndex));
                     text = text.substring(dividerIndex);
                 }
                 else {
                     //Нет пробелов до максимального количества символов в строке, найдём наименьший после этого
-                    int spaceIdx = text.indexOf(" ", MAX_SYMBOLS_IN_LINE - 1);
-                    int dotIdx = text.indexOf(".", MAX_SYMBOLS_IN_LINE);
+                    int spaceIdx = text.indexOf(" ", DrawConstants.MAX_SYMBOLS_IN_LINE - 1);
+                    int dotIdx = text.indexOf(".", DrawConstants.MAX_SYMBOLS_IN_LINE);
                     if(spaceIdx > 0 && spaceIdx < dotIdx && dividerIndex >= 0) {
                         lines.add(text.substring(0, dividerIndex));
                         text = text.substring(dividerIndex);
@@ -67,12 +65,12 @@ public class DrawTextStrategy implements DrawStrategy {
             }
             lines.add(text);
 
-            int totalHeight = FONT_SIZE * lines.size() + (lines.size() - 1) * LINE_MARGIN;
+            int totalHeight = DrawConstants.FONT_SIZE * lines.size() + (lines.size() - 1) * DrawConstants.LINE_MARGIN;
             int top = (BLOCK_HEIGHT - totalHeight) / 2;
-            int currentY = p.y + top + (FONT_SIZE / 2);
+            int currentY = p.y + top + (DrawConstants.FONT_SIZE / 2);
             for(String line : lines) {
                 gc.fillText(line, p.x + BLOCK_WIDTH / 2, currentY, BLOCK_WIDTH);
-                currentY += LINE_MARGIN + FONT_SIZE;
+                currentY += DrawConstants.LINE_MARGIN + DrawConstants.FONT_SIZE;
             }
         }
         return p;

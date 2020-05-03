@@ -6,7 +6,7 @@ import com.handen.easyFlowCharts.Nodes.LoopNodeGroup;
 import com.handen.easyFlowCharts.Nodes.MethodCallNode;
 import com.handen.easyFlowCharts.Nodes.MethodNodeGroup;
 import com.handen.easyFlowCharts.Nodes.ReturnNode;
-import com.handen.easyFlowCharts.Nodes.SoutNode;
+import com.handen.easyFlowCharts.Nodes.PrintNode;
 import com.handen.easyFlowCharts.Nodes.StatementNode;
 import com.handen.easyFlowCharts.Nodes.TryNodeGroup;
 
@@ -27,7 +27,7 @@ class LineParser {
             return new LoopNodeGroup(line);
         }
         if(lineIsSout(line)) {
-            return new SoutNode(line);
+            return new PrintNode(line);
         }
         if(lineIsReturn(line)) {
             return new ReturnNode(line);

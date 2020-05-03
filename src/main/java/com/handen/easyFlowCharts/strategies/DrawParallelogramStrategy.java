@@ -4,8 +4,8 @@ import com.handen.easyFlowCharts.utils.Point;
 
 import javafx.scene.canvas.GraphicsContext;
 
-import static com.handen.easyFlowCharts.Nodes.AbstractNode.BLOCK_HEIGHT;
-import static com.handen.easyFlowCharts.Nodes.AbstractNode.BLOCK_WIDTH;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_HEIGHT;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_WIDTH;
 
 public class DrawParallelogramStrategy implements DrawStrategy{
     @Override

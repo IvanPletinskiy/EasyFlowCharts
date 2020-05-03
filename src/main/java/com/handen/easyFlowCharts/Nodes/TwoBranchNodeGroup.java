@@ -1,6 +1,7 @@
 package com.handen.easyFlowCharts.Nodes;
 
-import com.handen.easyFlowCharts.Context;
+import com.handen.easyFlowCharts.flowchart.Context;
+import com.handen.easyFlowCharts.flowchart.DrawConstants;
 import com.handen.easyFlowCharts.strategies.DrawArrowStrategy;
 
 import java.util.ArrayList;
@@ -41,13 +42,33 @@ public abstract class TwoBranchNodeGroup extends NodeGroup {
     }
 
     @Override
+    public int measureWidth() {
+        int leftWidth = 0;
+        for(AbstractNode node : firstBranch) {
+            if(node.measureWidth() > leftWidth) {
+                leftWidth = node.measureWidth();
+            }
+        }
+
+        int rightWidth = 0;
+        for(AbstractNode node : secondBranch) {
+            if(node.measureWidth() > rightWidth) {
+                rightWidth = node.measureWidth();
+            }
+        }
+
+        int width = leftWidth + DrawConstants.THEN_ARROW_LENGTH + rightWidth;
+        return width;
+    }
+
+    @Override
     public int measureHeight() {
         int firstBranchHeight = 0;
         for(AbstractNode node: firstBranch) {
             firstBranchHeight += node.measureHeight();
         }
         if(firstBranch.size() > 0) {
-            firstBranchHeight += (firstBranch.size() - 1) * AbstractNode.ARROW_LENGTH;
+            firstBranchHeight += (firstBranch.size() - 1) * DrawConstants.ARROW_LENGTH;
         }
 
         int secondBranchHeight = 0;
@@ -55,12 +76,12 @@ public abstract class TwoBranchNodeGroup extends NodeGroup {
             secondBranchHeight += node.measureHeight();
         }
         if(secondBranch.size() > 0) {
-            secondBranchHeight += (secondBranch.size() - 1) * AbstractNode.ARROW_LENGTH;
+            secondBranchHeight += (secondBranch.size() - 1) * DrawConstants.ARROW_LENGTH;
         }
 
         int childrenHeight = Math.max(firstBranchHeight, secondBranchHeight);
 
-        return AbstractNode.BLOCK_HEIGHT + AbstractNode.ARROW_LENGTH + childrenHeight + AbstractNode.ARROW_LENGTH + AbstractNode.BLOCK_HEIGHT;
+        return DrawConstants.BLOCK_HEIGHT + DrawConstants.ARROW_LENGTH + childrenHeight + DrawConstants.ARROW_LENGTH + DrawConstants.BLOCK_HEIGHT;
     }
 
     protected Context drawBranch(Context context, ArrayList<AbstractNode> nodes) {
@@ -79,7 +100,7 @@ public abstract class TwoBranchNodeGroup extends NodeGroup {
         }
 
         if(!nodes.isEmpty()) {
-            sum += (nodes.size() - 1) * AbstractNode.ARROW_LENGTH;
+            sum += (nodes.size() - 1) * DrawConstants.ARROW_LENGTH;
         }
         return sum;
     }

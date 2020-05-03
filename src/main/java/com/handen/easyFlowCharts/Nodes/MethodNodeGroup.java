@@ -1,14 +1,13 @@
 package com.handen.easyFlowCharts.Nodes;
 
-import com.handen.easyFlowCharts.Context;
+import com.handen.easyFlowCharts.flowchart.Context;
+import com.handen.easyFlowCharts.flowchart.DrawConstants;
 import com.handen.easyFlowCharts.strategies.DrawArrowStrategy;
 import com.handen.easyFlowCharts.strategies.DrawCircleStrategy;
 import com.handen.easyFlowCharts.strategies.DrawOvalStrategy;
 import com.handen.easyFlowCharts.strategies.DrawTextStrategy;
 
-import static com.handen.easyFlowCharts.Context.PAGE_HEIGHT;
-
-public class MethodNodeGroup extends OneBranchNodeGroup {
+public class  MethodNodeGroup extends OneBranchNodeGroup {
 
     int page = 0;
 
@@ -41,8 +40,9 @@ public class MethodNodeGroup extends OneBranchNodeGroup {
 
         int height = 0;
 
-        for(AbstractNode node: getChildren()) {
-            if(height + node.measureHeight()  + ARROW_LENGTH + BLOCK_HEIGHT> PAGE_HEIGHT) {
+        for(AbstractNode node : getChildren()) {
+            //TODO перенести эту логику в FlowchartDrawer
+            if(height + node.measureHeight() + DrawConstants.ARROW_LENGTH + DrawConstants.BLOCK_HEIGHT > DrawConstants.LIST_HEIGHT - DrawConstants.LIST_BOTTOM_OFFSET) {
                 drawTransition(context);
                 height = 0;
             }
@@ -50,7 +50,7 @@ public class MethodNodeGroup extends OneBranchNodeGroup {
             context.setStrategy(new DrawArrowStrategy());
             context.drawCurrentStrategy();
             height += node.measureHeight();
-            height += ARROW_LENGTH;
+            height += DrawConstants.ARROW_LENGTH;
         }
 
         context.setStrategy(new DrawOvalStrategy());

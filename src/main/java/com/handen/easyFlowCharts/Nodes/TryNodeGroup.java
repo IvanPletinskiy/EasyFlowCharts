@@ -1,6 +1,7 @@
 package com.handen.easyFlowCharts.Nodes;
 
-import com.handen.easyFlowCharts.Context;
+import com.handen.easyFlowCharts.flowchart.Context;
+import com.handen.easyFlowCharts.flowchart.DrawConstants;
 import com.handen.easyFlowCharts.strategies.DrawArrowStrategy;
 import com.handen.easyFlowCharts.strategies.DrawConnectBranchesArrowStrategy;
 import com.handen.easyFlowCharts.strategies.DrawDiamondStrategy;
@@ -69,15 +70,15 @@ public class TryNodeGroup extends TwoBranchNodeGroup {
 
         int diff = measureBranchHeight(getSecondBranch());
         context.setCurrentPoint(leftBranchEndpoint);
-        context.setStrategy(new DrawVerticalLineStrategy(diff + AbstractNode.ARROW_LENGTH));
+        context.setStrategy(new DrawVerticalLineStrategy(diff + DrawConstants.ARROW_LENGTH));
         context.drawCurrentStrategy();
 
         //FIXME костыль
-        context.setStrategy(new DrawVerticalLineStrategy(AbstractNode.BLOCK_HEIGHT));
+        context.setStrategy(new DrawVerticalLineStrategy(DrawConstants.BLOCK_HEIGHT));
         context.drawCurrentStrategy();
         Point currentPoint = context.getCurrentPoint();
 
-        currentPoint.y -= AbstractNode.BLOCK_HEIGHT;
+        currentPoint.y -= DrawConstants.BLOCK_HEIGHT;
         context.setCurrentPoint(currentPoint);
 
         return context;

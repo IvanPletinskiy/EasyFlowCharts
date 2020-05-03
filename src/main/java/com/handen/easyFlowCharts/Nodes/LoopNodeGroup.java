@@ -1,6 +1,6 @@
 package com.handen.easyFlowCharts.Nodes;
 
-import com.handen.easyFlowCharts.Context;
+import com.handen.easyFlowCharts.flowchart.Context;
 import com.handen.easyFlowCharts.strategies.DrawArrowStrategy;
 import com.handen.easyFlowCharts.strategies.DrawCloseLoopPolygonStrategy;
 import com.handen.easyFlowCharts.strategies.DrawOpenLoopPolygonStrategy;

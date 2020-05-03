@@ -1,5 +1,7 @@
 package com.handen.easyFlowCharts.Nodes;
 
+import com.handen.easyFlowCharts.flowchart.DrawConstants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +25,26 @@ public abstract class OneBranchNodeGroup extends NodeGroup {
     abstract String getClosingBlockText();
 
     @Override
+    public int measureWidth() {
+        int width = 0;
+        for(AbstractNode node: children) {
+            if(node.measureWidth() > width) {
+                width = node.measureWidth();
+            }
+        }
+
+        return width;
+    }
+
+    @Override
     public int measureHeight() {
         int sum = 0;
         for(AbstractNode child : getChildren()) {
             sum += child.measureHeight();
         }
         if(children.size() > 0) {
-            sum += (children.size() - 1) * AbstractNode.ARROW_LENGTH;
+            sum += (children.size() - 1) * DrawConstants.ARROW_LENGTH;
         }
-        return AbstractNode.BLOCK_HEIGHT + AbstractNode.ARROW_LENGTH + sum +  AbstractNode.ARROW_LENGTH + AbstractNode.BLOCK_HEIGHT;
+        return DrawConstants.BLOCK_HEIGHT + DrawConstants.ARROW_LENGTH + sum +  DrawConstants.ARROW_LENGTH + DrawConstants.BLOCK_HEIGHT;
     }
 }

@@ -1,6 +1,7 @@
 package com.handen.easyFlowCharts.Nodes;
 
-import com.handen.easyFlowCharts.Context;
+import com.handen.easyFlowCharts.flowchart.Context;
+import com.handen.easyFlowCharts.flowchart.DrawConstants;
 import com.handen.easyFlowCharts.strategies.DrawArrowStrategy;
 import com.handen.easyFlowCharts.strategies.DrawConnectBranchesArrowStrategy;
 import com.handen.easyFlowCharts.strategies.DrawDiamondStrategy;
@@ -9,6 +10,10 @@ import com.handen.easyFlowCharts.strategies.DrawThenArrowStrategy;
 import com.handen.easyFlowCharts.strategies.DrawVerticalLineStrategy;
 import com.handen.easyFlowCharts.utils.Point;
 @SuppressWarnings("Duplicates")
+/**
+ * This NodeGroup represents an if statement with two branches. getFirstBranch returns right branch(then branch),
+ *  getSecondBranch returns left branch(else branch).
+ */
 public class IfNodeGroup extends TwoBranchNodeGroup {
 
     public IfNodeGroup(String line) {
@@ -33,7 +38,7 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
 
     @Override
     public Context draw(Context context) {
-
+        //TODO handle else branch width
         context.setStrategy(new DrawDiamondStrategy());
         context.drawCurrentStrategy();
         context.setStrategy(new DrawTextStrategy(getText()));
@@ -76,17 +81,17 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
                 context.setStrategy(new DrawConnectBranchesArrowStrategy());
                 context.drawCurrentStrategy();
                 context.setCurrentPoint(leftBranchEndpoint);
-                context.setStrategy(new DrawVerticalLineStrategy(diff + ARROW_LENGTH));
+                context.setStrategy(new DrawVerticalLineStrategy(diff + DrawConstants.ARROW_LENGTH));
                 context.drawCurrentStrategy();
             }
         }
 
         //FIXME костыль
-        context.setStrategy(new DrawVerticalLineStrategy(BLOCK_HEIGHT));
+        context.setStrategy(new DrawVerticalLineStrategy(DrawConstants.BLOCK_HEIGHT));
         context.drawCurrentStrategy();
         Point currentPoint = context.getCurrentPoint();
 
-        currentPoint.y -= BLOCK_HEIGHT;
+        currentPoint.y -= DrawConstants.BLOCK_HEIGHT;
         context.setCurrentPoint(currentPoint);
 
         return context;

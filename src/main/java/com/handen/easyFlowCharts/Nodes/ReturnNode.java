@@ -1,6 +1,6 @@
 package com.handen.easyFlowCharts.Nodes;
 
-import com.handen.easyFlowCharts.Context;
+import com.handen.easyFlowCharts.flowchart.Context;
 import com.handen.easyFlowCharts.strategies.DrawParallelogramStrategy;
 import com.handen.easyFlowCharts.strategies.DrawTextStrategy;
 
