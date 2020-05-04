@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="EasyFlowCharts" />
+        <module name="easy_flow_charts" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="EasyFlowCharts" target="10" />
+      <module name="easy_flow_charts" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
