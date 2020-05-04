@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="easy_flow_charts" />
+        <module name="EasyFlowCharts" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="easy_flow_charts" target="11" />
+      <module name="EasyFlowCharts" target="10" />
     </bytecodeTargetLevel>
   </component>
 </project>
