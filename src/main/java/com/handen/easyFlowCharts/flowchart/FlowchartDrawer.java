@@ -43,6 +43,18 @@ public class FlowchartDrawer {
         prepare();
 
         FileMethodsPair pair = filesMethodsPairs.get(0);
+
+        if(!pair.methods.isEmpty()) {
+            MethodNodeGroup method = pair.methods.get(0);
+            pair.methods.remove(0);
+            if(methodCanFit(method)) {
+                drawMethod(method);
+            }
+            if(pair.methods.isEmpty()) {
+                filesMethodsPairs.remove(0);
+            }
+        }
+        /*
         for(int i = 0; i < pair.methods.size(); i++) {
             MethodNodeGroup method = pair.methods.get(i);
             if(methodCanFit(method)) {
@@ -50,6 +62,8 @@ public class FlowchartDrawer {
             }
         }
 
+         */
+        currentFilePageCounter++;
         return canvas;
     }
 

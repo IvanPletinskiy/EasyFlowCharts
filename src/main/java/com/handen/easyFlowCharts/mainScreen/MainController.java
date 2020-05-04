@@ -6,6 +6,7 @@ import com.handen.easyFlowCharts.flowchart.FlowchartDrawer;
 import com.handen.easyFlowCharts.utils.FileMethodsPair;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -16,6 +17,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,6 +44,8 @@ import javafx.stage.Stage;
 
 public class MainController implements Initializable {
 
+    public Button source_open_button;
+    public Button save_open_button;
     private BooleanProperty isSaving;
     public TextField source_text_area;
     public Label source_error_text;
@@ -55,10 +60,13 @@ public class MainController implements Initializable {
     private static final String TITLE_CHOOSE_SOURCE_DIRECTORY = "Choose source files directory";
     private static final String TITLE_SAVE_DIRECTORY = "Choose save directory";
     private static final String ERROR_NOT_DIRECTORY = "Entered path isn't a directory.";
-    private static final String ERROR_CANNOT_OPEN = "Error can't open directory.";
+    private static final String ERROR_CANNOT_OPEN = "Error! Сannot open directory.";
+    private static final String ERROR_DOESNT_EXISTS = "Error! Directory doesn't exists.";
+    private ExecutorService executor;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        source_text_area.setText("C:\\Projects\\hellofx\\src\\main\\java\\com\\handen\\lab");
         save_text_area.setText("C:\\Users\\hande\\Desktop\\flowChart");
         isSaving = new SimpleBooleanProperty(true);
         isSaving.bindBidirectional(save_flowchart_checkbox.selectedProperty());
@@ -67,8 +75,10 @@ public class MainController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 save_text_area.setDisable(!newValue);
                 save_error_text.setDisable(!newValue);
+                save_open_button.setDisable(!newValue);
             }
         });
+        executor = Executors.newSingleThreadExecutor();
     }
 
     public void setStage(Stage stage) {
@@ -196,6 +206,10 @@ public class MainController implements Initializable {
             errorLabel.setText(ERROR_CANNOT_OPEN);
             isValid = false;
         }
+        if(!file.exists()) {
+            errorLabel.setText(ERROR_DOESNT_EXISTS);
+            isValid = false;
+        }
         errorLabel.setVisible(!isValid);
 
         return isValid;
@@ -206,12 +220,18 @@ public class MainController implements Initializable {
         File file = new File(savePath, fileName + ".png");
         WritableImage image = canvas.snapshot(null, null);
         BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
-        try {
-            ImageIO.write(bImage, "png", file);
-        }
-        catch(IOException e) {
-            e.printStackTrace();
-        }
+        RenderedImage renderedImage = SwingFXUtils.fromFXImage(image, null);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ImageIO.write(bImage, "png", file);
+                }
+                catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private List<FileMethodsPair> createFilesMethodsPairs(String startPath) {
@@ -258,9 +278,11 @@ public class MainController implements Initializable {
 
         String name = file.getName();
         int dotIndex = name.lastIndexOf('.');
-
-        String extension = name.substring(dotIndex);
-        boolean isValid = file.isFile() && file.canRead() && extension.equals(".java");
+        boolean isValid = dotIndex >= 0;
+        if(dotIndex >= 0) {
+            String extension = name.substring(dotIndex);
+            isValid = file.isFile() && file.canRead() && extension.equals(".java");
+        }
         return isValid;
     }
 }

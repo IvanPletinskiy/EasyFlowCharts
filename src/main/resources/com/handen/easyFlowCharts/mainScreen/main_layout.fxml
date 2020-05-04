@@ -9,15 +9,13 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handen.easyFlowCharts.mainScreen.MainController">
+<AnchorPane prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handen.easyFlowCharts.mainScreen.MainController">
 
     <MenuBar>
         <Menu text="About">
@@ -48,7 +46,7 @@
             </VBox.margin>
         </Label>
         <HBox prefHeight="100.0" prefWidth="200.0">
-            <TextField fx:id="source_text_area" prefHeight="30.0" prefWidth="600.0">
+            <TextField fx:id="source_text_area" prefHeight="39.0" prefWidth="526.0">
                 <font>
                     <Font size="18.0" />
                 </font>
@@ -56,13 +54,13 @@
                <Insets top="7.0" />
             </HBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" onAction="#onSourceButtonClicked" style="-fx-background-color: transparent;">
-                <graphic>
-                    <ImageView fitHeight="48.0" fitWidth="48.0">
-                        <Image url="ic_folder.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
+            <Button fx:id="source_open_button" mnemonicParsing="false" onAction="#onSourceButtonClicked" prefHeight="47.0" prefWidth="70.0" text="Open...">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <HBox.margin>
+               <Insets left="5.0" />
+            </HBox.margin></Button>
         </HBox>
         <Label fx:id="source_error_text" textFill="#f44336" visible="false">
             <font>
@@ -86,7 +84,7 @@
             </VBox.margin>
         </Label>
         <HBox prefHeight="100.0" prefWidth="200.0">
-            <TextField fx:id="save_text_area" layoutX="60.0" layoutY="252.0" prefHeight="39.0" prefWidth="547.0">
+            <TextField fx:id="save_text_area" layoutX="60.0" layoutY="252.0" prefHeight="39.0" prefWidth="526.0">
                 <font>
                     <Font size="18.0" />
                 </font>
@@ -94,13 +92,13 @@
                     <Insets top="7.0" />
                 </HBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" onAction="#onSaveButtonClicked" style="-fx-background-color: transparent;">
-                <graphic>
-                    <ImageView fitHeight="48.0" fitWidth="48.0">
-                        <Image url="ic_folder.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
+            <Button fx:id="save_open_button" mnemonicParsing="false" onAction="#onSaveButtonClicked" prefHeight="46.0" prefWidth="70.0" text="Open...">
+            <font>
+               <Font size="14.0" />
+            </font>
+            <HBox.margin>
+               <Insets left="5.0" />
+            </HBox.margin></Button>
         </HBox>
         <Label fx:id="save_error_text" layoutX="60.0" layoutY="292.0" textFill="#f44336" visible="false">
             <font>
