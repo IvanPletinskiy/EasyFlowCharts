@@ -6,7 +6,6 @@ import com.handen.easyFlowCharts.flowchart.FlowchartDrawer;
 import com.handen.easyFlowCharts.utils.FileMethodsPair;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -17,17 +16,19 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -39,6 +40,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -46,6 +48,7 @@ public class MainController implements Initializable {
 
     public Button source_open_button;
     public Button save_open_button;
+    public VBox progress_container;
     private BooleanProperty isSaving;
     public TextField source_text_area;
     public Label source_error_text;
@@ -62,7 +65,7 @@ public class MainController implements Initializable {
     private static final String ERROR_NOT_DIRECTORY = "Entered path isn't a directory.";
     private static final String ERROR_CANNOT_OPEN = "Error! Сannot open directory.";
     private static final String ERROR_DOESNT_EXISTS = "Error! Directory doesn't exists.";
-    private ExecutorService executor;
+    private static volatile String progressMessage = "empty";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -78,7 +81,6 @@ public class MainController implements Initializable {
                 save_open_button.setDisable(!newValue);
             }
         });
-        executor = Executors.newSingleThreadExecutor();
     }
 
     public void setStage(Stage stage) {
@@ -89,7 +91,7 @@ public class MainController implements Initializable {
 
     }
 
-    public void onCreateButtonClicked(ActionEvent actionEvent) {
+    public void onCreateButtonClicked(ActionEvent actionEvent) throws Exception {
         boolean isInputValid = validateInput();
         if(isInputValid) {
             hideButton();
@@ -98,8 +100,24 @@ public class MainController implements Initializable {
                 cleanOutputDirectory();
             }
             String startPath = source_text_area.getText();
-            var filesMap = createFilesMethodsPairs(startPath);
-            createFlowChart(filesMap);
+            var drawFlowchartTask = new Task<>() {
+                @Override
+                protected Object call() throws Exception {
+                    var filesMap = createFilesMethodsPairs(startPath);
+                    createFlowChart(filesMap);
+                    return null;
+                }
+            };
+            var progressProperty = drawFlowchartTask.progressProperty();
+            progressProperty.addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    updateProgress(newValue.doubleValue());
+                }
+            });
+           // progress_bar.progressProperty().bind(progressProperty);
+
+            new Thread(drawFlowchartTask).start();
         }
         else {
             create_button.setStyle("-fx-background-color: #f44336");
@@ -109,16 +127,13 @@ public class MainController implements Initializable {
     private void cleanOutputDirectory() {
         String savePath = save_text_area.getText();
         File directory = new File(savePath);
-
         for(File file : directory.listFiles()) {
             file.delete();
         }
     }
 
     private void showProgress() {
-        progress_bar.setVisible(true);
-        progress_percent_label.setVisible(true);
-        progress_description_label.setVisible(true);
+       progress_container.setVisible(true);
     }
 
     private void hideButton() {
@@ -154,29 +169,49 @@ public class MainController implements Initializable {
     }
 
     private void createFlowChart(List<FileMethodsPair> fileMethodsPairList) {
-        FlowchartDrawer flowchartDrawer = new FlowchartDrawer(fileMethodsPairList);
+        FlowchartDrawer flowchartDrawer = new FlowchartDrawer();
         int filesCount = fileMethodsPairList.size();
-        int pagesDrawn = 0;
-        while(flowchartDrawer.hasNext()) {
-            String pageName = flowchartDrawer.getCurrentPageName();
-            String fileName = flowchartDrawer.getCurrentFileName();
-            int remainFilesCount = flowchartDrawer.getRemainFilesCount();
-            int filesProcessed = filesCount - remainFilesCount;
-            int progress = (filesProcessed / filesCount) * 100;
-            String message = String.format("Drawing flowchart for file:%s", fileName);
-            updateProgress(progress, message);
+        int[] proccesed = new int[1];
+        List<Canvas> canvases = new LinkedList<>();
 
-            Canvas canvas = flowchartDrawer.drawPage();
-            pagesDrawn++;
-            if(isSaving.get()) {
-                executor.execute(new Runnable() {
+        fileMethodsPairList.stream()
+                .flatMap(flowchartDrawer::drawFile)
+                .map(new Function<Canvas, Canvas>() {
                     @Override
-                    public void run() {
-                        saveFlowchartPage(canvas, pageName);
+                    public Canvas apply(Canvas canvas) {
+                        proccesed[0]++;
+                        int filesProcessed = filesCount - proccesed[0];
+                        int progress = (filesProcessed / filesCount) * 100;
+                        int index = canvas.getId().indexOf('_');
+                        String fileName = canvas.getId().substring(0, index);
+                        MainController.progressMessage = String.format("Drawing flowchart for file:%s", fileName);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateProgress(progress);
+                            }
+                        });
+                        return canvas;
+                    }
+                })
+                .forEach(new Consumer<Canvas>() {
+                    @Override
+                    public void accept(Canvas canvas) {
+
+                        if(isSaving.get()) {
+                            String fileName = canvas.getId();
+                            var snapshot = takeSnapshot(canvas);
+
+                            saveFlowchartPage(snapshot, fileName);
+                        }
                     }
                 });
-            }
-        }
+    }
+
+    private BufferedImage takeSnapshot(Canvas canvas) {
+        WritableImage snapshot = canvas.snapshot(null, null);
+        BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
+        return image;
     }
 
     private boolean validateInput() {
@@ -220,30 +255,41 @@ public class MainController implements Initializable {
         return isValid;
     }
 
-    private void saveFlowchartPage(Canvas canvas, String fileName) {
-        String savePath = save_text_area.getText();
-        File file = new File(savePath, fileName + ".png");
-        WritableImage image = canvas.snapshot(null, null);
-        BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
-        RenderedImage renderedImage = SwingFXUtils.fromFXImage(image, null);
-        try {
-            ImageIO.write(bImage, "png", file);
-            //ImageIO.write(renderedImage, "png", file);
-        }
-        catch(IOException e) {
-            e.printStackTrace();
-        }
+    private void saveFlowchartPage(BufferedImage image, String fileName) {
+        new Thread(() -> {
+            String savePath = save_text_area.getText();
+            File file = new File(savePath, fileName + ".png");
+            try {
+                ImageIO.write(image, "png", file);
+            }
+            catch(IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private List<FileMethodsPair> createFilesMethodsPairs(String startPath) {
-        updateProgress(0, "Getting all files in directories");
-        List<File> fileList = getFilesStream(startPath);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                progressMessage = "Getting all files in directories";
+                updateProgress(0);
+            }
+        });
+
+        List<File> fileList = getFilesList(startPath);
         List<FileMethodsPair> filesMethodPairs = new LinkedList<>();
         for(int i = 0; i < fileList.size(); i++) {
             File file = fileList.get(i);
-            int progress = (int) (i / ((double) fileList.size()) * 100);
-            String message = String.format("Parsing file:%s", file.getName());
-            updateProgress(progress, message);
+            int finalI = i;
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    int progress = (int) (finalI / ((double) fileList.size()) * 100);
+                    progressMessage = String.format("Parsing file:%s", file.getName());
+                    updateProgress(progress);
+                }
+            });
             TreeBuilder treeBuilder = new TreeBuilder(file);
             List<MethodNodeGroup> methods = treeBuilder.parseFile();
             FileMethodsPair pair = new FileMethodsPair(file, methods);
@@ -253,13 +299,13 @@ public class MainController implements Initializable {
         return filesMethodPairs;
     }
 
-    private void updateProgress(int progress, String message) {
-        progress_bar.setProgress(progress / 100);
-        progress_description_label.setText(message);
+    private void updateProgress(double progress) {
+        progress_bar.setProgress(progress);
+        progress_description_label.setText(progressMessage);
         progress_percent_label.setText(progress + "%");
     }
 
-    private List<File> getFilesStream(String filePath) {
+    private List<File> getFilesList(String filePath) {
         Path start = Paths.get(filePath);
         List<File> fileList = Collections.emptyList();
         try(Stream<Path> stream = Files.walk(start, 10)) {

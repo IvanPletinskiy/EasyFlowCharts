@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/EasyFlowCharts.iml" filepath="$PROJECT_DIR$/EasyFlowCharts.iml" />
-      <module fileurl="file://$PROJECT_DIR$/easy_flow_charts.iml" filepath="$PROJECT_DIR$/easy_flow_charts.iml" />
     </modules>
   </component>
 </project>

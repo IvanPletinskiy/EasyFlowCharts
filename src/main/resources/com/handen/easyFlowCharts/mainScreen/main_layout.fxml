@@ -113,28 +113,32 @@
                 <Font size="24.0" />
             </font>
         </Button>
-        <HBox prefHeight="27.0" prefWidth="600.0" visible="false">
-            <ProgressBar fx:id="progress_bar" prefHeight="18.0" prefWidth="554.0" progress="0.4">
-                <HBox.margin>
-                    <Insets top="4.0" />
-                </HBox.margin>
-            </ProgressBar>
-            <Label fx:id="progress_percent_label" text="40%">
-                <font>
-                    <Font size="18.0" />
-                </font>
-                <HBox.margin>
-                    <Insets left="10.0" />
-                </HBox.margin>
-            </Label>
-            <VBox.margin>
-                <Insets top="30.0" />
-            </VBox.margin>
-        </HBox>
-        <Label fx:id="progress_description_label" layoutX="60.0" layoutY="397.0" text="Main.java" visible="false">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Label>
+      <VBox prefHeight="143.0" prefWidth="600.0" fx:id="progress_container" visible="false">
+         <children>
+              <HBox prefHeight="27.0" prefWidth="600.0" visible="false">
+                  <ProgressBar fx:id="progress_bar" prefHeight="18.0" prefWidth="554.0" progress="0.4">
+                      <HBox.margin>
+                          <Insets top="4.0" />
+                      </HBox.margin>
+                  </ProgressBar>
+                  <Label fx:id="progress_percent_label" text="40%">
+                      <font>
+                          <Font size="18.0" />
+                      </font>
+                      <HBox.margin>
+                          <Insets left="10.0" />
+                      </HBox.margin>
+                  </Label>
+                  <VBox.margin>
+                      <Insets top="30.0" />
+                  </VBox.margin>
+              </HBox>
+              <Label fx:id="progress_description_label" text="Main.java">
+                  <font>
+                      <Font size="18.0" />
+                  </font>
+              </Label>
+         </children>
+      </VBox>
     </VBox>
 </AnchorPane>
