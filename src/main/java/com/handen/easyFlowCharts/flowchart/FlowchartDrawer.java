@@ -74,7 +74,9 @@ public class FlowchartDrawer {
             if(methodCanFit(method)) {
                 drawMethod(method);
             }
-            String canvasName = pair.getFileName() + "_" + method.getText();
+            int bracetIndex = method.getText().indexOf("(");
+            String methodName = method.getText().substring(0, bracetIndex);
+            String canvasName = pair.getFileName() + "_" + methodName;
             canvas.setId(canvasName);
             canvases.add(canvas);
         }
