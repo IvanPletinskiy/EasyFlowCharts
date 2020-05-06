@@ -3,6 +3,7 @@ module EasyFlowCharts {
     requires javafx.fxml;
     requires java.desktop;
     requires javafx.swing;
+    requires javafx.graphics;
     opens com.handen.easyFlowCharts.mainScreen;
     opens com.handen.easyFlowCharts.Nodes;
     exports com.handen.easyFlowCharts.Nodes;

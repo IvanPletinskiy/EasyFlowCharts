@@ -5,7 +5,6 @@ import com.handen.easyFlowCharts.utils.FileMethodsPair;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -66,7 +65,7 @@ public class FlowchartDrawer {
         gc.setTextBaseline(VPos.CENTER);
     }
 
-    public Stream<Canvas> drawFile(FileMethodsPair pair) {
+    public List<Canvas> drawFile(FileMethodsPair pair) {
         List<Canvas> canvases = new LinkedList<>();
         currentFilePageCounter = 0;
         for(int i = 0; i < pair.methods.size(); i++) {
@@ -80,6 +79,6 @@ public class FlowchartDrawer {
             canvases.add(canvas);
         }
 
-        return canvases.stream();
+        return canvases;
     }
 }

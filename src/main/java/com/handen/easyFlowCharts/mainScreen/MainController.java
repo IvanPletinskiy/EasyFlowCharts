@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -28,7 +29,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -66,6 +66,7 @@ public class MainController implements Initializable {
     private static final String ERROR_CANNOT_OPEN = "Error! Сannot open directory.";
     private static final String ERROR_DOESNT_EXISTS = "Error! Directory doesn't exists.";
     private static volatile String progressMessage = "empty";
+    private long lastProgressUpdateMillis = -1;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -83,10 +84,6 @@ public class MainController implements Initializable {
         });
     }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
     public void onSaveCheckedChanged(MouseEvent mouseEvent) {
 
     }
@@ -96,32 +93,107 @@ public class MainController implements Initializable {
         if(isInputValid) {
             hideButton();
             showProgress();
-            if(isSaving.get()) {
-                cleanOutputDirectory();
-            }
-            String startPath = source_text_area.getText();
-            var drawFlowchartTask = new Task<>() {
-                @Override
-                protected Object call() throws Exception {
-                    var filesMap = createFilesMethodsPairs(startPath);
-                    createFlowChart(filesMap);
-                    return null;
-                }
-            };
-            var progressProperty = drawFlowchartTask.progressProperty();
-            progressProperty.addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    updateProgress(newValue.doubleValue());
-                }
-            });
-           // progress_bar.progressProperty().bind(progressProperty);
-
-            new Thread(drawFlowchartTask).start();
+            createFlowchart();
         }
         else {
             create_button.setStyle("-fx-background-color: #f44336");
         }
+    }
+
+    private void createFlowchart() {
+        String startPath = source_text_area.getText();
+        new Thread(() -> {
+            if(isSaving.get()) {
+                updateProgressOnUIThread(0, "Clearing output directory");
+                cleanOutputDirectory();
+            }
+            var filesMap = createFilesMethodsPairs(startPath);
+            drawFlowchart(filesMap);
+        }).start();
+    }
+
+    private List<FileMethodsPair> createFilesMethodsPairs(String startPath) {
+        updateProgressOnUIThread(0, "Getting all files in directories");
+
+        List<File> fileList = getFilesList(startPath);
+        int filesCount = fileList.size();
+        List<FileMethodsPair> filesMethodPairs = new LinkedList<>();
+        for(int i = 0; i < fileList.size(); i++) {
+            File file = fileList.get(i);
+
+            double progress = i / ((double) filesCount);
+            String message = String.format("Parsing file:%s", file.getName());
+            updateProgressOnUIThread(progress, message);
+
+            TreeBuilder treeBuilder = new TreeBuilder(file);
+            List<MethodNodeGroup> methods = treeBuilder.parseFile();
+            FileMethodsPair pair = new FileMethodsPair(file, methods);
+            filesMethodPairs.add(pair);
+        }
+
+        return filesMethodPairs;
+    }
+
+    private void updateProgressOnUIThread(double progress, String message) {
+        long currentMillis = new Date().getTime();
+        if(currentMillis - lastProgressUpdateMillis > 500) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    progress_bar.setProgress(progress);
+                    progress_description_label.setText(message);
+                    progress_percent_label.setText(progress + "%");
+                    lastProgressUpdateMillis = new Date().getTime();
+                }
+            });
+        }
+    }
+
+    private void drawFlowchart(List<FileMethodsPair> fileMethodsPairList) {
+        FlowchartDrawer flowchartDrawer = new FlowchartDrawer();
+        int filesCount = fileMethodsPairList.size();
+        int filesProccesed = 0;
+        List<Canvas> canvases = new LinkedList<>();
+        for(var pair : fileMethodsPairList) {
+            List<Canvas> fileCanvases = flowchartDrawer.drawFile(pair);
+            filesProccesed++;
+            double progress = (filesProccesed / (double) filesCount);
+            String fileName = pair.file.getName();
+            String message = String.format("Drawing flowchart for file:%s", fileName);
+            updateProgressOnUIThread(progress, message);
+            canvases.addAll(fileCanvases);
+        }
+
+        if(isSaving.get()) {
+            saveCanvases(canvases, 0);
+        }
+    }
+
+    private void saveCanvases(List<Canvas> canvases, int i) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Canvas canvas = canvases.get(i);
+                String fileName = canvas.getId();
+                var snapshot = takeSnapshot(canvas);
+                double progress = i / (double) canvases.size();
+                String message = "Saving " + fileName + " to memory";
+                updateProgressOnUIThread(progress, message);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        saveFlowchartPage(snapshot, fileName);
+                    }
+                }).start();
+                saveCanvases(canvases, i + 1);
+            }
+        });
+    }
+
+    private BufferedImage takeSnapshot(Canvas canvas) {
+        WritableImage snapshot = canvas.snapshot(null, null);
+        BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
+        return image;
     }
 
     private void cleanOutputDirectory() {
@@ -133,7 +205,7 @@ public class MainController implements Initializable {
     }
 
     private void showProgress() {
-       progress_container.setVisible(true);
+        progress_container.setVisible(true);
     }
 
     private void hideButton() {
@@ -166,52 +238,6 @@ public class MainController implements Initializable {
         var directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle(title);
         return directoryChooser.showDialog(stage);
-    }
-
-    private void createFlowChart(List<FileMethodsPair> fileMethodsPairList) {
-        FlowchartDrawer flowchartDrawer = new FlowchartDrawer();
-        int filesCount = fileMethodsPairList.size();
-        int[] proccesed = new int[1];
-        List<Canvas> canvases = new LinkedList<>();
-
-        fileMethodsPairList.stream()
-                .flatMap(flowchartDrawer::drawFile)
-                .map(new Function<Canvas, Canvas>() {
-                    @Override
-                    public Canvas apply(Canvas canvas) {
-                        proccesed[0]++;
-                        int filesProcessed = filesCount - proccesed[0];
-                        int progress = (filesProcessed / filesCount) * 100;
-                        int index = canvas.getId().indexOf('_');
-                        String fileName = canvas.getId().substring(0, index);
-                        MainController.progressMessage = String.format("Drawing flowchart for file:%s", fileName);
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateProgress(progress);
-                            }
-                        });
-                        return canvas;
-                    }
-                })
-                .forEach(new Consumer<Canvas>() {
-                    @Override
-                    public void accept(Canvas canvas) {
-
-                        if(isSaving.get()) {
-                            String fileName = canvas.getId();
-                            var snapshot = takeSnapshot(canvas);
-
-                            saveFlowchartPage(snapshot, fileName);
-                        }
-                    }
-                });
-    }
-
-    private BufferedImage takeSnapshot(Canvas canvas) {
-        WritableImage snapshot = canvas.snapshot(null, null);
-        BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
-        return image;
     }
 
     private boolean validateInput() {
@@ -266,43 +292,6 @@ public class MainController implements Initializable {
                 e.printStackTrace();
             }
         }).start();
-    }
-
-    private List<FileMethodsPair> createFilesMethodsPairs(String startPath) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                progressMessage = "Getting all files in directories";
-                updateProgress(0);
-            }
-        });
-
-        List<File> fileList = getFilesList(startPath);
-        List<FileMethodsPair> filesMethodPairs = new LinkedList<>();
-        for(int i = 0; i < fileList.size(); i++) {
-            File file = fileList.get(i);
-            int finalI = i;
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    int progress = (int) (finalI / ((double) fileList.size()) * 100);
-                    progressMessage = String.format("Parsing file:%s", file.getName());
-                    updateProgress(progress);
-                }
-            });
-            TreeBuilder treeBuilder = new TreeBuilder(file);
-            List<MethodNodeGroup> methods = treeBuilder.parseFile();
-            FileMethodsPair pair = new FileMethodsPair(file, methods);
-            filesMethodPairs.add(pair);
-        }
-
-        return filesMethodPairs;
-    }
-
-    private void updateProgress(double progress) {
-        progress_bar.setProgress(progress);
-        progress_description_label.setText(progressMessage);
-        progress_percent_label.setText(progress + "%");
     }
 
     private List<File> getFilesList(String filePath) {
