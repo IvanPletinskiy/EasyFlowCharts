@@ -203,19 +203,21 @@ public class MainController implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Canvas canvas = canvases.get(i);
-                String fileName = canvas.getId();
-                var snapshot = takeSnapshot(canvas);
-                double progress = i / (double) canvases.size();
-                String message = "Saving " + fileName + " to memory";
-                updateProgressOnUIThread(progress, message);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        saveFlowchartPage(snapshot, fileName);
-                    }
-                }).start();
-                saveCanvases(canvases, i + 1);
+                if(i < canvases.size()) {
+                    Canvas canvas = canvases.get(i);
+                    String fileName = canvas.getId();
+                    var snapshot = takeSnapshot(canvas);
+                    double progress = i / (double) canvases.size();
+                    String message = "Saving " + fileName + " to memory";
+                    updateProgressOnUIThread(progress, message);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            saveFlowchartPage(snapshot, fileName);
+                        }
+                    }).start();
+                    saveCanvases(canvases, i + 1);
+                }
             }
         });
     }
