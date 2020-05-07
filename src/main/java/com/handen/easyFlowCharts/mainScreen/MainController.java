@@ -2,6 +2,7 @@ package com.handen.easyFlowCharts.mainScreen;
 
 import com.handen.easyFlowCharts.Nodes.MethodNodeGroup;
 import com.handen.easyFlowCharts.TreeBuilder;
+import com.handen.easyFlowCharts.flowChartScreen.FlowchartController;
 import com.handen.easyFlowCharts.flowchart.FlowchartDrawer;
 import com.handen.easyFlowCharts.utils.FileMethodsPair;
 
@@ -17,8 +18,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,7 +30,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -65,8 +67,8 @@ public class MainController implements Initializable {
     private static final String ERROR_NOT_DIRECTORY = "Entered path isn't a directory.";
     private static final String ERROR_CANNOT_OPEN = "Error! Сannot open directory.";
     private static final String ERROR_DOESNT_EXISTS = "Error! Directory doesn't exists.";
-    private static volatile String progressMessage = "empty";
     private long lastProgressUpdateMillis = -1;
+    private FlowchartController flowchartController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -82,6 +84,8 @@ public class MainController implements Initializable {
                 save_open_button.setDisable(!newValue);
             }
         });
+
+        flowchartController = new FlowchartController();
     }
 
     public void onSaveCheckedChanged(MouseEvent mouseEvent) {
@@ -91,12 +95,31 @@ public class MainController implements Initializable {
     public void onCreateButtonClicked(ActionEvent actionEvent) throws Exception {
         boolean isInputValid = validateInput();
         if(isInputValid) {
-            hideButton();
+            create_button.setVisible(false);
             showProgress();
+            startFlowchartScene();
             createFlowchart();
         }
         else {
             create_button.setStyle("-fx-background-color: #f44336");
+        }
+    }
+
+    private void startFlowchartScene() {
+        FXMLLoader loader = new FXMLLoader(DrawFlowChartsApplication.class.getResource("flowchart_layout.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        if(root != null) {
+            Stage stage = new Stage();
+            stage.setTitle("Flowchart");
+
+            stage.setScene(new Scene(root, 600, 900));
+            stage.show();
         }
     }
 
@@ -162,6 +185,13 @@ public class MainController implements Initializable {
             String message = String.format("Drawing flowchart for file:%s", fileName);
             updateProgressOnUIThread(progress, message);
             canvases.addAll(fileCanvases);
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    flowchartController.addCanvases(canvases);
+                }
+            });
         }
 
         if(isSaving.get()) {
@@ -206,10 +236,6 @@ public class MainController implements Initializable {
 
     private void showProgress() {
         progress_container.setVisible(true);
-    }
-
-    private void hideButton() {
-        create_button.setVisible(false);
     }
 
     public void onSourceButtonClicked(ActionEvent actionEvent) {

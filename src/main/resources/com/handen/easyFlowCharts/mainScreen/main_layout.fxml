@@ -115,7 +115,7 @@
         </Button>
       <VBox prefHeight="143.0" prefWidth="600.0" fx:id="progress_container" visible="false">
          <children>
-              <HBox prefHeight="27.0" prefWidth="600.0" visible="false">
+              <HBox prefHeight="27.0" prefWidth="600.0">
                   <ProgressBar fx:id="progress_bar" prefHeight="18.0" prefWidth="554.0" progress="0.4">
                       <HBox.margin>
                           <Insets top="4.0" />

@@ -22,7 +22,6 @@ public class DrawFlowChartsApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(DrawFlowChartsApplication.class.getResource("main_layout.fxml"));
         Scene scene = new Scene(loader.load());

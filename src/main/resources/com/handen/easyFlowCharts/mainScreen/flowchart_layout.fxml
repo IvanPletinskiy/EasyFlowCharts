@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="900.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.handen.easyFlowCharts.flowChartScreen.FlowchartController">
+    <VBox>
+        <HBox prefHeight="50.0" prefWidth="600.0">
+            <Button fx:id="previous_button" mnemonicParsing="false"
+                    onAction="#onPreviousClicked" text="Previous">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+                <HBox.margin>
+                    <Insets left="100.0" top="10.0"/>
+                </HBox.margin>
+            </Button>
+            <Label fx:id="status_label" text="1/19">
+                <HBox.margin>
+                    <Insets left="100.0" top="15.0"/>
+                </HBox.margin>
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+            <Button fx:id="next_button" layoutX="110.0" layoutY="20.0" mnemonicParsing="false"
+                    onAction="#onNextClicked" text="Next">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+                <HBox.margin>
+                    <Insets left="100.0" top="10.0"/>
+                </HBox.margin>
+            </Button>
+            <VBox.margin>
+                <Insets/>
+            </VBox.margin>
+        </HBox>
+        <ScrollPane fx:id="canvas_container" prefHeight="851.0" prefWidth="600.0"/>
+    </VBox>
+    <Label layoutX="244.0" layoutY="430.0" text="Flowchart is loading...">
+        <font>
+            <Font size="16.0"/>
+        </font>
+    </Label>
+</AnchorPane>
