@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -84,8 +85,6 @@ public class MainController implements Initializable {
                 save_open_button.setDisable(!newValue);
             }
         });
-
-        flowchartController = new FlowchartController();
     }
 
     public void onSaveCheckedChanged(MouseEvent mouseEvent) {
@@ -115,9 +114,10 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
         if(root != null) {
+            flowchartController = loader.getController();
             Stage stage = new Stage();
             stage.setTitle("Flowchart");
-
+            flowchartController.setStage(stage);
             stage.setScene(new Scene(root, 600, 900));
             stage.show();
         }
@@ -132,7 +132,7 @@ public class MainController implements Initializable {
             }
             var filesMap = createFilesMethodsPairs(startPath);
             drawFlowchart(filesMap);
-        }).start();
+        }, "Flowchart creator Thread").start();
     }
 
     private List<FileMethodsPair> createFilesMethodsPairs(String startPath) {
@@ -159,13 +159,14 @@ public class MainController implements Initializable {
 
     private void updateProgressOnUIThread(double progress, String message) {
         long currentMillis = new Date().getTime();
-        if(currentMillis - lastProgressUpdateMillis > 500) {
+        if(currentMillis - lastProgressUpdateMillis > 250) {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     progress_bar.setProgress(progress);
                     progress_description_label.setText(message);
-                    progress_percent_label.setText(progress + "%");
+                    int percent = (int) (progress * 100);
+                    progress_percent_label.setText(percent + "%");
                     lastProgressUpdateMillis = new Date().getTime();
                 }
             });
@@ -174,40 +175,39 @@ public class MainController implements Initializable {
 
     private void drawFlowchart(List<FileMethodsPair> fileMethodsPairList) {
         FlowchartDrawer flowchartDrawer = new FlowchartDrawer();
-        int filesCount = fileMethodsPairList.size();
-        int filesProccesed = 0;
-        List<Canvas> canvases = new LinkedList<>();
+        updateProgressOnUIThread(0, "Drawing flowchart");
+
+        //        List<Canvas> canvases = new LinkedList<>();
         for(var pair : fileMethodsPairList) {
             List<Canvas> fileCanvases = flowchartDrawer.drawFile(pair);
-            filesProccesed++;
-            double progress = (filesProccesed / (double) filesCount);
-            String fileName = pair.file.getName();
-            String message = String.format("Drawing flowchart for file:%s", fileName);
-            updateProgressOnUIThread(progress, message);
-            canvases.addAll(fileCanvases);
+            //canvases.addAll(fileCanvases);
 
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    flowchartController.addCanvases(canvases);
+                    flowchartController.addCanvases(fileCanvases);
+                    fileCanvases.clear();
+
                 }
             });
+            if(isSaving.get()) {
+                saveCanvases(new LinkedList<>(fileCanvases), 0, fileCanvases.size());
+            }
         }
-
         if(isSaving.get()) {
-            saveCanvases(canvases, 0);
+            updateProgressOnUIThread(1.0, "Flowchart drawing done.");
         }
     }
 
-    private void saveCanvases(List<Canvas> canvases, int i) {
+    private void saveCanvases(Queue<Canvas> canvases, final int count, final int total) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                if(i < canvases.size()) {
-                    Canvas canvas = canvases.get(i);
+                if(!canvases.isEmpty()) {
+                    Canvas canvas = canvases.poll();
                     String fileName = canvas.getId();
                     var snapshot = takeSnapshot(canvas);
-                    double progress = i / (double) canvases.size();
+                    double progress = (count + 1) / (double) total;
                     String message = "Saving " + fileName + " to memory";
                     updateProgressOnUIThread(progress, message);
                     new Thread(new Runnable() {
@@ -216,7 +216,11 @@ public class MainController implements Initializable {
                             saveFlowchartPage(snapshot, fileName);
                         }
                     }).start();
-                    saveCanvases(canvases, i + 1);
+
+                    saveCanvases(canvases, count + 1, total);
+                }
+                else {
+                    updateProgressOnUIThread(1, "Done");
                 }
             }
         });
@@ -310,16 +314,14 @@ public class MainController implements Initializable {
     }
 
     private void saveFlowchartPage(BufferedImage image, String fileName) {
-        new Thread(() -> {
-            String savePath = save_text_area.getText();
-            File file = new File(savePath, fileName + ".png");
-            try {
-                ImageIO.write(image, "png", file);
-            }
-            catch(IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        String savePath = save_text_area.getText();
+        File file = new File(savePath, fileName + ".png");
+        try {
+            ImageIO.write(image, "png", file);
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<File> getFilesList(String filePath) {

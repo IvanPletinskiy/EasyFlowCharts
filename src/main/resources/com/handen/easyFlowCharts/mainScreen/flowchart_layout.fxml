@@ -23,7 +23,7 @@
                     <Insets left="100.0" top="10.0"/>
                 </HBox.margin>
             </Button>
-            <Label fx:id="status_label" text="1/19">
+            <Label fx:id="status_label" text="0/0">
                 <HBox.margin>
                     <Insets left="100.0" top="15.0"/>
                 </HBox.margin>
@@ -46,7 +46,7 @@
         </HBox>
         <ScrollPane fx:id="canvas_container" prefHeight="851.0" prefWidth="600.0"/>
     </VBox>
-    <Label layoutX="244.0" layoutY="430.0" text="Flowchart is loading...">
+    <Label layoutX="244.0" layoutY="430.0" text="Flowchart is loading..." fx:id="content_loading_label">
         <font>
             <Font size="16.0"/>
         </font>

@@ -10,4 +10,5 @@ module EasyFlowCharts {
     exports com.handen.easyFlowCharts.mainScreen;
     exports com.handen.easyFlowCharts.utils;
     exports com.handen.easyFlowCharts.flowchart;
+    exports com.handen.easyFlowCharts.flowChartScreen;
 }
