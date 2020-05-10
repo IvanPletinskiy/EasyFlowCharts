@@ -21,7 +21,7 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
     }
 
     @Override
-    public String getText() {
+    public String getOpeningBlockText() {
         String line = super.line.trim();
         int methodNameStartIdx = line.substring(0, line.indexOf("(")).lastIndexOf(" ") + 1;
         return line.substring(methodNameStartIdx).replace("{", "");
@@ -31,7 +31,7 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
     public Context draw(Context context) {
         context.drawStrategy(new DrawOvalStrategy());
 
-        context.drawStrategy(new DrawTextStrategy(getText()));
+        context.drawStrategy(new DrawTextStrategy(getOpeningBlockText()));
 
         context.drawStrategy(new DrawArrowStrategy());
 

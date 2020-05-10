@@ -20,7 +20,7 @@ public class TryNodeGroup extends TwoBranchNodeGroup {
     }
 
     @Override
-    public String getText() {
+    public String getOpeningBlockText() {
         return exception;
     }
 
@@ -47,7 +47,7 @@ public class TryNodeGroup extends TwoBranchNodeGroup {
 
         //Draw diamond
         context.drawStrategy(new DrawDiamondStrategy());
-        context.drawStrategy(new DrawTextStrategy(getText()));
+        context.drawStrategy(new DrawTextStrategy(getOpeningBlockText()));
 
         context.drawStrategy(new DrawArrowStrategy());
 

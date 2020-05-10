@@ -21,14 +21,14 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
     }
 
     @Override
-    public String getText() {
+    public String getOpeningBlockText() {
         String text = line.substring(line.indexOf("(") + 1, line.lastIndexOf(")"));
         return text;
     }
 
     @Override
     public void addNode(AbstractNode node) {
-        if(node.getText().contains("else ") && node.getText().contains("{")) {
+        if(node.getOpeningBlockText().contains("else ") && node.getOpeningBlockText().contains("{")) {
             setIsFirstBranch(false);
         }
         else {
@@ -42,7 +42,7 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
 
         context.drawStrategy(new DrawDiamondStrategy());
 
-        context.drawStrategy(new DrawTextStrategy(getText()));
+        context.drawStrategy(new DrawTextStrategy(getOpeningBlockText()));
 
         Point diamondPoint = new Point(context.getCurrentPoint());
 

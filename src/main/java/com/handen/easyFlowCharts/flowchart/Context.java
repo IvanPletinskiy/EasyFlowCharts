@@ -10,6 +10,7 @@ public class Context {
     private GraphicsContext gc;
     //private DrawStrategy strategy;
     private Point currentPoint;
+    private int loopNumber = 1;
 
     public Context(GraphicsContext gc, int currentX, int currentY) {
         this.gc = gc;
@@ -35,5 +36,11 @@ public class Context {
     //TODO перенести логику в FlowchartDrawer
     public void goToNextPage(int page) {
         currentPoint = new Point(page * (DrawConstants.LIST_HEIGHT / 2), 50);
+    }
+
+    public String getLoopLabelText() {
+        String label = "A" + loopNumber;
+        loopNumber++;
+        return label;
     }
 }

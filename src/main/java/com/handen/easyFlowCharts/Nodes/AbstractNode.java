@@ -10,7 +10,7 @@ public abstract class AbstractNode {
         this.line = line;
     }
 
-    public abstract String getText();
+    public abstract String getOpeningBlockText();
 
     public abstract int measureHeight();
 

@@ -11,7 +11,7 @@ public class PrintNode extends SingleNode {
     }
 
     @Override
-    public String getText() {
+    public String getOpeningBlockText() {
         String text = "sout(" + line.substring(line.indexOf("(") + 1, line.lastIndexOf(")")) + ")";
         return text;
     }
@@ -20,7 +20,7 @@ public class PrintNode extends SingleNode {
     public Context draw(Context context) {
         context.drawStrategy(new DrawParallelogramStrategy());
 
-        context.drawStrategy(new DrawTextStrategy(getText()));
+        context.drawStrategy(new DrawTextStrategy(getOpeningBlockText()));
         return context;
     }
 }

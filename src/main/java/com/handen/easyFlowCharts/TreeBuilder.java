@@ -94,7 +94,7 @@ public class TreeBuilder {
             if(isLineValid(line) && !line.contains("}")) {
                 AbstractNode node = lineParser.nextNode(line);
                 if(node instanceof MethodNodeGroup) {
-                    lineParser.addMethodName(node.getText());
+                    lineParser.addMethodName(node.getOpeningBlockText());
                 }
             }
         }

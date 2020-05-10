@@ -14,13 +14,31 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
 
     @Override
     String getClosingBlockText() {
-        //TODO
-        return null;
+        String text = "";
+        if(line.contains("for") && !line.contains(":")) {
+            //for
+            int lastSemicolonIndex = line.lastIndexOf(';');
+            String action = line.substring(lastSemicolonIndex + 1, line.lastIndexOf(")"));
+        }
+        return text;
     }
 
     @Override
-    public String getText() {
-        String text = line.substring(line.indexOf("(") + 1, line.lastIndexOf(")"));
+    public String getOpeningBlockText() {
+        String text;
+        if(line.contains("for") && !line.contains(":")) {
+            //for
+            int firstSemicolonIndex = line.indexOf(';');
+            String initialization = line.substring(line.indexOf("(") + 1, firstSemicolonIndex);
+            int secondSemicolonIndex = line.indexOf(';', firstSemicolonIndex + 1);
+            String condition = line.substring(secondSemicolonIndex + 1, line.lastIndexOf(";"));
+            text = initialization + condition;
+        }
+        else {
+            //while, foreach
+            text = line.substring(line.indexOf("(") + 1, line.lastIndexOf(")"));
+        }
+
         return text;
     }
 
@@ -28,7 +46,8 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
     public Context draw(Context context) {
         context.drawStrategy(new DrawOpenLoopPolygonStrategy());
 
-        context.drawStrategy(new DrawTextStrategy(getText()));
+        String openingText = context.getLoopLabelText() + getOpeningBlockText();
+        context.drawStrategy(new DrawTextStrategy(openingText));
 
         context.drawStrategy(new DrawArrowStrategy());
 
@@ -38,7 +57,8 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
         }
 
         context.drawStrategy(new DrawCloseLoopPolygonStrategy());
-        context.drawStrategy(new DrawTextStrategy(getClosingBlockText()));
+        String closingText = context.getLoopLabelText() + getClosingBlockText();
+        context.drawStrategy(new DrawTextStrategy(closingText));
         return context;
     }
 }
