@@ -67,7 +67,8 @@ public class MainController implements Initializable {
     private static final String TITLE_SAVE_DIRECTORY = "Choose save directory";
     private static final String ERROR_NOT_DIRECTORY = "Entered path isn't a directory.";
     private static final String ERROR_CANNOT_OPEN = "Error! Сannot open directory.";
-    private static final String ERROR_DOESNT_EXISTS = "Error! Directory doesn't exists.";
+    private static final String ERROR_DOES_NOT_EXISTS = "Error! Directory doesn't exists.";
+    private static final String ERROR_NOT_JAVA_FILE = "Entered file is not a .java file.";
     private long lastProgressUpdateMillis = -1;
     private FlowchartController flowchartController;
 
@@ -283,29 +284,43 @@ public class MainController implements Initializable {
         return isInputValid;
     }
 
-    private boolean validateSavePath() {
-        String path = save_text_area.getText();
-        return validate(path, save_error_text);
-    }
-
     private boolean validateSourcePath() {
+        boolean isValid;
         String path = source_text_area.getText();
-        return validate(path, source_error_text);
-    }
-
-    private boolean validate(String path, Label errorLabel) {
         File file = new File(path);
-        boolean isValid = true;
-        if(!file.isDirectory()) {
-            errorLabel.setText(ERROR_NOT_DIRECTORY);
+        if(!file.isDirectory() && file.getName().contains(".java")) {
+            source_error_text.setText(ERROR_NOT_JAVA_FILE);
             isValid = false;
         }
+        else {
+            isValid = validate(file, source_error_text);
+        }
+        return isValid;
+    }
+
+    private boolean validateSavePath() {
+        boolean isValid;
+        String path = save_text_area.getText();
+        File file = new File(path);
+        if(!file.isDirectory()) {
+            save_error_text.setText(ERROR_NOT_DIRECTORY);
+            isValid = false;
+        }
+        else {
+            isValid = validate(file, save_error_text);
+        }
+
+        return isValid;
+    }
+
+    private boolean validate(File file, Label errorLabel) {
+        boolean isValid = true;
         if(!file.canRead() && !file.canWrite()) {
             errorLabel.setText(ERROR_CANNOT_OPEN);
             isValid = false;
         }
         if(!file.exists()) {
-            errorLabel.setText(ERROR_DOESNT_EXISTS);
+            errorLabel.setText(ERROR_DOES_NOT_EXISTS);
             isValid = false;
         }
         errorLabel.setVisible(!isValid);
