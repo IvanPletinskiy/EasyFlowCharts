@@ -1,15 +1,18 @@
 package com.handen.easyFlowCharts.Nodes;
 
 import com.handen.easyFlowCharts.flowchart.Context;
-import com.handen.easyFlowCharts.flowchart.DrawConstants;
 import com.handen.easyFlowCharts.strategies.DrawArrowStrategy;
 import com.handen.easyFlowCharts.strategies.DrawCircleStrategy;
 import com.handen.easyFlowCharts.strategies.DrawOvalStrategy;
 import com.handen.easyFlowCharts.strategies.DrawTextStrategy;
 
-public class  MethodNodeGroup extends OneBranchNodeGroup {
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.ARROW_LENGTH;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_HEIGHT;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_WIDTH;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.LIST_BOTTOM_OFFSET;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.LIST_HEIGHT;
 
-    int page = 0;
+public class MethodNodeGroup extends OneBranchNodeGroup {
 
     public MethodNodeGroup(String line) {
         super(line);
@@ -30,23 +33,22 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
     @Override
     public void draw(Context context) {
         context.drawStrategy(new DrawOvalStrategy());
-
         context.drawStrategy(new DrawTextStrategy(getText()));
-
         context.drawStrategy(new DrawArrowStrategy());
 
         int height = 0;
+        int width = BLOCK_WIDTH;
 
         for(Node node : getChildren()) {
             //TODO перенести эту логику в FlowchartDrawer
-            if(height + node.measureHeight() + DrawConstants.ARROW_LENGTH + DrawConstants.BLOCK_HEIGHT > DrawConstants.LIST_HEIGHT - DrawConstants.LIST_BOTTOM_OFFSET) {
-                drawTransition(context);
+            if(height + node.measureHeight() + ARROW_LENGTH + BLOCK_HEIGHT > LIST_HEIGHT - LIST_BOTTOM_OFFSET) {
+                drawReference(context, width);
                 height = 0;
             }
-            //context = node.draw(context);
             context.drawStrategy(new DrawArrowStrategy());
             height += node.measureHeight();
-            height += DrawConstants.ARROW_LENGTH;
+            height += ARROW_LENGTH;
+            width = (node.measureWidth() > width) ? node.measureWidth() : width;
         }
 
         context.drawStrategy(new DrawOvalStrategy());
@@ -54,14 +56,14 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
         context.drawStrategy(new DrawTextStrategy(getClosingBlockText()));
     }
 
-    private void drawTransition(Context context) {
-        page++;
-
+    private void drawReference(Context context, int columnWidth) {
         context.drawStrategy(new DrawCircleStrategy());
-
-        context.goToNextPage(page);
-
+        String referenceLabel = context.getReferenceLabel();
+        context.drawStrategy(new DrawTextStrategy(referenceLabel));
+        context.goToNextColumn(columnWidth);
         context.drawStrategy(new DrawCircleStrategy());
+        context.drawStrategy(new DrawTextStrategy(referenceLabel));
         context.drawStrategy(new DrawArrowStrategy());
+
     }
 }

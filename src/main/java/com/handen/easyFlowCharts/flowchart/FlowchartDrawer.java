@@ -22,7 +22,6 @@ import static com.handen.easyFlowCharts.flowchart.DrawConstants.LIST_WIDTH;
 import static com.handen.easyFlowCharts.flowchart.DrawConstants.STROKE_COLOR;
 
 public class FlowchartDrawer {
-   // private List<FileMethodsPair> filesMethodsPairs;
     private int currentFilePageCounter;
     private Context context;
 
@@ -30,12 +29,16 @@ public class FlowchartDrawer {
     private int currentWidth;
     private int currentHeight;
 
-    public FlowchartDrawer() {
-        //this.filesMethodsPairs = filesMethodsPairs;
-    }
+    private int loopNumber;
+    private int referenceId;
 
     private void drawMethod(MethodNodeGroup methodNodeGroup) {
          methodNodeGroup.draw(context);
+    }
+
+    public FlowchartDrawer() {
+        loopNumber = 1;
+        referenceId = 0;
     }
 
     private void prepareCanvas() {
@@ -45,7 +48,13 @@ public class FlowchartDrawer {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         initializeGraphicsContext(gc);
 
-        context = new Context(gc, currentWidth, currentHeight);
+
+        if(context != null) {
+            //copy loopNumber and referenceId from previous context
+            loopNumber = context.getLoopNumber();
+            referenceId = context.getReferenceIndex();
+        }
+        context = new Context(gc, currentWidth, currentHeight, loopNumber, referenceId);
     }
 
     private boolean methodCanFit(MethodNodeGroup method) {
@@ -74,8 +83,8 @@ public class FlowchartDrawer {
             if(methodCanFit(method)) {
                 drawMethod(method);
             }
-            int bracetIndex = method.getText().indexOf("(");
-            String methodName = method.getText().substring(0, bracetIndex);
+            int bracketIndex = method.getText().indexOf("(");
+            String methodName = method.getText().substring(0, bracketIndex);
             String canvasName = pair.getFileName() + "_" + methodName;
             canvas.setId(canvasName);
             canvases.add(canvas);

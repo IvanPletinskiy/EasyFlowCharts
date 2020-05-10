@@ -13,6 +13,8 @@ public class DrawConstants {
     public static final int LIST_TOP_OFFSET = 250;
     public static final int LIST_BOTTOM_OFFSET = 250;
 
+    public static final int COLUMN_SPACE = 200;
+
     public static final int BLOCK_HEIGHT = 150;
     public static final int BLOCK_WIDTH = 300;
     public static final int THEN_ARROW_LENGTH = BLOCK_WIDTH;
