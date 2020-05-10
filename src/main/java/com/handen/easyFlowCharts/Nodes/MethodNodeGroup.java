@@ -29,14 +29,11 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
 
     @Override
     public Context draw(Context context) {
-        context.setStrategy(new DrawOvalStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawOvalStrategy());
 
-        context.setStrategy(new DrawTextStrategy(getText()));
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawTextStrategy(getText()));
 
-        context.setStrategy(new DrawArrowStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawArrowStrategy());
 
         int height = 0;
 
@@ -47,17 +44,14 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
                 height = 0;
             }
             context = node.draw(context);
-            context.setStrategy(new DrawArrowStrategy());
-            context.drawCurrentStrategy();
+            context.drawStrategy(new DrawArrowStrategy());
             height += node.measureHeight();
             height += DrawConstants.ARROW_LENGTH;
         }
 
-        context.setStrategy(new DrawOvalStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawOvalStrategy());
 
-        context.setStrategy(new DrawTextStrategy(getClosingBlockText()));
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawTextStrategy(getClosingBlockText()));
 
         return context;
     }
@@ -65,14 +59,11 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
     private void drawTransition(Context context) {
         page++;
 
-        context.setStrategy(new DrawCircleStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawCircleStrategy());
 
         context.goToNextPage(page);
 
-        context.setStrategy(new DrawCircleStrategy());
-        context.drawCurrentStrategy();
-        context.setStrategy(new DrawArrowStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawCircleStrategy());
+        context.drawStrategy(new DrawArrowStrategy());
     }
 }

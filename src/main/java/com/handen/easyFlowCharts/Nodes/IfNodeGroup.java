@@ -39,23 +39,23 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
     @Override
     public Context draw(Context context) {
         //TODO handle else branch width
-        context.setStrategy(new DrawDiamondStrategy());
-        context.drawCurrentStrategy();
-        context.setStrategy(new DrawTextStrategy(getText()));
-        context.drawCurrentStrategy();
+
+        context.drawStrategy(new DrawDiamondStrategy());
+
+        context.drawStrategy(new DrawTextStrategy(getText()));
 
         Point diamondPoint = new Point(context.getCurrentPoint());
 
-        context.setStrategy(new DrawArrowStrategy());
-        context.drawCurrentStrategy();
+
+        context.drawStrategy(new DrawArrowStrategy());
         //draw left branch
         drawBranch(context, getSecondBranch());
         Point leftBranchEndpoint = new Point(context.getCurrentPoint());
 
         //draw right branch
         context.setCurrentPoint(diamondPoint);
-        context.setStrategy(new DrawThenArrowStrategy());
-        context.drawCurrentStrategy();
+
+        context.drawStrategy(new DrawThenArrowStrategy());
         drawBranch(context, getFirstBranch());
 
         int leftBranchHeight = measureBranchHeight(getSecondBranch());
@@ -64,31 +64,25 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
         int diff = Math.abs(leftBranchHeight - rightBranchHeight);
 
         if(leftBranchHeight > rightBranchHeight) {
-            context.setStrategy(new DrawVerticalLineStrategy(diff));
-            context.drawCurrentStrategy();
+            context.drawStrategy(new DrawVerticalLineStrategy(diff));
 
-            context.setStrategy(new DrawConnectBranchesArrowStrategy());
-            context.drawCurrentStrategy();
+            context.drawStrategy(new DrawConnectBranchesArrowStrategy());
             context.setCurrentPoint(leftBranchEndpoint);
         }
         else {
             if(leftBranchHeight == rightBranchHeight) {
-                context.setStrategy(new DrawConnectBranchesArrowStrategy());
-                context.drawCurrentStrategy();
+                context.drawStrategy(new DrawConnectBranchesArrowStrategy());
                 context.setCurrentPoint(leftBranchEndpoint);
             }
             else {
-                context.setStrategy(new DrawConnectBranchesArrowStrategy());
-                context.drawCurrentStrategy();
+                context.drawStrategy(new DrawConnectBranchesArrowStrategy());
                 context.setCurrentPoint(leftBranchEndpoint);
-                context.setStrategy(new DrawVerticalLineStrategy(diff + DrawConstants.ARROW_LENGTH));
-                context.drawCurrentStrategy();
+                var strategy = new DrawVerticalLineStrategy(diff + DrawConstants.ARROW_LENGTH);
+                context.drawStrategy(strategy);
             }
         }
 
-        //FIXME костыль
-        context.setStrategy(new DrawVerticalLineStrategy(DrawConstants.BLOCK_HEIGHT));
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawVerticalLineStrategy(DrawConstants.BLOCK_HEIGHT));
         Point currentPoint = context.getCurrentPoint();
 
         currentPoint.y -= DrawConstants.BLOCK_HEIGHT;

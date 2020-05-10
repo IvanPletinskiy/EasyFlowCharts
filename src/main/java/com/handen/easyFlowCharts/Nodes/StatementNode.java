@@ -17,11 +17,9 @@ public class StatementNode extends SingleNode {
 
     @Override
     public Context draw(Context context) {
-        context.setStrategy(new DrawRectangleStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawRectangleStrategy());
 
-        context.setStrategy(new DrawTextStrategy(getText()));
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawTextStrategy(getText()));
         return context;
     }
 }

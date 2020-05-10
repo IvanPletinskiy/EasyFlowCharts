@@ -87,8 +87,7 @@ public abstract class TwoBranchNodeGroup extends NodeGroup {
     protected Context drawBranch(Context context, ArrayList<AbstractNode> nodes) {
         for(AbstractNode node: nodes) {
             node.draw(context);
-            context.setStrategy(new DrawArrowStrategy());
-            context.drawCurrentStrategy();
+            context.drawStrategy(new DrawArrowStrategy());
         }
         return context;
     }

@@ -26,25 +26,19 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
 
     @Override
     public Context draw(Context context) {
-        context.setStrategy(new DrawOpenLoopPolygonStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawOpenLoopPolygonStrategy());
 
-        context.setStrategy(new DrawTextStrategy(getText()));
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawTextStrategy(getText()));
 
-        context.setStrategy(new DrawArrowStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawArrowStrategy());
 
         for(AbstractNode node : getChildren()) {
             node.draw(context);
-            context.setStrategy(new DrawArrowStrategy());
-            context.drawCurrentStrategy();
+            context.drawStrategy(new DrawArrowStrategy());
         }
 
-        context.setStrategy(new DrawCloseLoopPolygonStrategy());
-        context.drawCurrentStrategy();
-        context.setStrategy(new DrawTextStrategy(getClosingBlockText()));
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawCloseLoopPolygonStrategy());
+        context.drawStrategy(new DrawTextStrategy(getClosingBlockText()));
         return context;
     }
 }

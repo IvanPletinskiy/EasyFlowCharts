@@ -40,42 +40,33 @@ public class TryNodeGroup extends TwoBranchNodeGroup {
     public Context draw(Context context) {
         for(AbstractNode node: super.getFirstBranch()) {
             context = node.draw(context);
-            context.setStrategy(new DrawArrowStrategy());
-            context.drawCurrentStrategy();
+            context.drawStrategy(new DrawArrowStrategy());
         }
 
         Point diamondPoint = new Point(context.getCurrentPoint());
 
         //Draw diamond
-        context.setStrategy(new DrawDiamondStrategy());
-        context.drawCurrentStrategy();
-        context.setStrategy(new DrawTextStrategy(getText()));
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawDiamondStrategy());
+        context.drawStrategy(new DrawTextStrategy(getText()));
 
-        context.setStrategy(new DrawArrowStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawArrowStrategy());
 
         Point leftBranchEndpoint = new Point(context.getCurrentPoint());
 
         //draw right branch
         context.setCurrentPoint(diamondPoint);
-        context.setStrategy(new DrawThenArrowStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawThenArrowStrategy());
         drawBranch(context, getSecondBranch());
 
-        context.setStrategy(new DrawConnectBranchesArrowStrategy());
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawConnectBranchesArrowStrategy());
 
         context.setCurrentPoint(new Point(leftBranchEndpoint));
 
         int diff = measureBranchHeight(getSecondBranch());
         context.setCurrentPoint(leftBranchEndpoint);
-        context.setStrategy(new DrawVerticalLineStrategy(diff + DrawConstants.ARROW_LENGTH));
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawVerticalLineStrategy(diff + DrawConstants.ARROW_LENGTH));
 
-        //FIXME костыль
-        context.setStrategy(new DrawVerticalLineStrategy(DrawConstants.BLOCK_HEIGHT));
-        context.drawCurrentStrategy();
+        context.drawStrategy(new DrawVerticalLineStrategy(DrawConstants.BLOCK_HEIGHT));
         Point currentPoint = context.getCurrentPoint();
 
         currentPoint.y -= DrawConstants.BLOCK_HEIGHT;

@@ -8,19 +8,19 @@ import javafx.scene.canvas.GraphicsContext;
 public class Context {
 
     private GraphicsContext gc;
-    private DrawStrategy strategy;
+    //private DrawStrategy strategy;
     private Point currentPoint;
 
     public Context(GraphicsContext gc, int currentX, int currentY) {
         this.gc = gc;
         currentPoint = new Point(currentX, currentY);
     }
-
+/*
     public void setStrategy(DrawStrategy strategy) {
         this.strategy = strategy;
     }
-
-    public void drawCurrentStrategy() {
+*/
+    public void drawStrategy(DrawStrategy strategy) {
         currentPoint =  strategy.draw(gc, currentPoint);
     }
 
