@@ -40,11 +40,11 @@ public class MethodNodeGroup extends OneBranchNodeGroup {
         int width = BLOCK_WIDTH;
 
         for(Node node : getChildren()) {
-            //TODO перенести эту логику в FlowchartDrawer
             if(height + node.measureHeight() + ARROW_LENGTH + BLOCK_HEIGHT > LIST_HEIGHT - LIST_BOTTOM_OFFSET) {
                 drawReference(context, width);
                 height = 0;
             }
+            node.draw(context);
             context.drawStrategy(new DrawArrowStrategy());
             height += node.measureHeight();
             height += ARROW_LENGTH;
@@ -64,6 +64,5 @@ public class MethodNodeGroup extends OneBranchNodeGroup {
         context.drawStrategy(new DrawCircleStrategy());
         context.drawStrategy(new DrawTextStrategy(referenceLabel));
         context.drawStrategy(new DrawArrowStrategy());
-
     }
 }

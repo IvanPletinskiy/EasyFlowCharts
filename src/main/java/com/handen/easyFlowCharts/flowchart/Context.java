@@ -36,7 +36,7 @@ public class Context {
     }
 
     //TODO перенести логику в FlowchartDrawer
-    private void goToNextColumn(int previousColumnWidth) {
+    public void goToNextColumn(int previousColumnWidth) {
         int x = LIST_LEFT_OFFSET + currentPoint.x + previousColumnWidth;
         x += DrawConstants.COLUMN_SPACE;
         currentPoint = new Point(x, DrawConstants.LIST_TOP_OFFSET);

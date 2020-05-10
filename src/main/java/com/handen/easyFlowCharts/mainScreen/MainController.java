@@ -74,7 +74,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        source_text_area.setText("C:\\Projects\\hellofx\\src\\main\\java\\com\\handen\\lab");
+        source_text_area.setText("C:\\Projects\\easy_flow_charts\\src\\test\\java\\FlowchartTest.java");
         save_text_area.setText("C:\\Users\\hande\\Desktop\\flowChart");
         isSaving = new SimpleBooleanProperty(true);
         isSaving.bindBidirectional(save_flowchart_checkbox.selectedProperty());
@@ -103,6 +103,8 @@ public class MainController implements Initializable {
         else {
             create_button.setStyle("-fx-background-color: #f44336");
         }
+        source_error_text.setVisible(!isInputValid);
+        save_error_text.setVisible(!isInputValid);
     }
 
     private void startFlowchartScene() {
@@ -288,7 +290,7 @@ public class MainController implements Initializable {
         boolean isValid;
         String path = source_text_area.getText();
         File file = new File(path);
-        if(!file.isDirectory() && file.getName().contains(".java")) {
+        if(!file.isDirectory() && !file.getName().contains(".java")) {
             source_error_text.setText(ERROR_NOT_JAVA_FILE);
             isValid = false;
         }

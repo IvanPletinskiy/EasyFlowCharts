@@ -77,6 +77,6 @@ public class TryNodeGroup extends TwoBranchNodeGroup {
         context.setCurrentPoint(diamondPoint);
         context.drawStrategy(new DrawThenArrowStrategy(DrawConstants.BLOCK_WIDTH));
         drawBranch(context, getSecondBranch());
-        context.drawStrategy(new DrawConnectBranchesArrowStrategy());
+        context.drawStrategy(new DrawConnectBranchesArrowStrategy(diamondPoint));
     }
 }

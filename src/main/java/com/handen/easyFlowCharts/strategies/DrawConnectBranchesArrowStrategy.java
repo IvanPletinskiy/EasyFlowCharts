@@ -4,23 +4,28 @@ import com.handen.easyFlowCharts.utils.Point;
 
 import javafx.scene.canvas.GraphicsContext;
 
-import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_HEIGHT;
 import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_WIDTH;
-import static com.handen.easyFlowCharts.flowchart.DrawConstants.THEN_ARROW_LENGTH;
 
 public class DrawConnectBranchesArrowStrategy implements DrawStrategy {
 
-    public static int ARROW_LENGTH_X = 16;
-    public static int ARROW_LENGTH_Y = 8;
+    private static final int ARROW_LENGTH_X = 16;
+    private static final int ARROW_LENGTH_Y = 8;
+
+    private Point leftBranchEndpoint;
+
+    public DrawConnectBranchesArrowStrategy(Point leftBranchEndpoint) {
+        this.leftBranchEndpoint = leftBranchEndpoint;
+    }
 
     @Override
     public Point draw(GraphicsContext gc, Point p) {
         int startX = p.x + BLOCK_WIDTH / 2;
-        gc.strokeLine(startX, p.y, startX - BLOCK_HEIGHT - THEN_ARROW_LENGTH, p.y);
+        int endX = leftBranchEndpoint.x + (BLOCK_WIDTH / 2);
 
-        p.x = startX - BLOCK_HEIGHT - THEN_ARROW_LENGTH;
+        gc.strokeLine(startX, p.y, endX, p.y);
 
-        //TODO draw arrow
+        p.x = endX;
+
         int x2 = p.x + ARROW_LENGTH_X;
         int y2 = p.y - ARROW_LENGTH_Y;
 

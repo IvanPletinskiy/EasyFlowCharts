@@ -126,6 +126,6 @@ public class TreeBuilder {
 
     private boolean isLineValid(String line) {
         return !line.contains("import") && !line.contains("class ") && !line.contains("package") && !line.contains("@") &&
-                !line.isEmpty() && !line.contains("@") && !line.contains("interface") && !(line.contains("void") && line.contains(";"));
+                !line.isEmpty() && !line.contains("@") && !line.contains("interface") && !(line.contains("void") && line.contains(";")) && !line.contains("/*") && !line.contains("*/");
     }
 }

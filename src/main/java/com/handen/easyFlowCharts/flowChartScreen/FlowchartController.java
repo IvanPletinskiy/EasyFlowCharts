@@ -46,8 +46,6 @@ public class FlowchartController implements Initializable {
         this.canvases.addAll(canvases);
         total += canvases.size();
         update();
-        updateStatusLabel();
-        updateButtons();
     }
 
     private void update() {

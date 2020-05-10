@@ -82,16 +82,16 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
 
         if(leftBranchHeight > rightBranchHeight) {
             context.drawStrategy(new DrawVerticalLineStrategy(diff));
-            context.drawStrategy(new DrawConnectBranchesArrowStrategy());
+            context.drawStrategy(new DrawConnectBranchesArrowStrategy(leftBranchEndpoint));
             context.setCurrentPoint(leftBranchEndpoint);
         }
         else {
             if(leftBranchHeight == rightBranchHeight) {
-                context.drawStrategy(new DrawConnectBranchesArrowStrategy());
+                context.drawStrategy(new DrawConnectBranchesArrowStrategy(leftBranchEndpoint));
                 context.setCurrentPoint(leftBranchEndpoint);
             }
             else {
-                context.drawStrategy(new DrawConnectBranchesArrowStrategy());
+                context.drawStrategy(new DrawConnectBranchesArrowStrategy(leftBranchEndpoint));
                 context.setCurrentPoint(leftBranchEndpoint);
                 var strategy = new DrawVerticalLineStrategy(diff + DrawConstants.ARROW_LENGTH);
                 context.drawStrategy(strategy);
