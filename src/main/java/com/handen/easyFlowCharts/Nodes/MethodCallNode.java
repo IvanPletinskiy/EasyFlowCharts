@@ -17,11 +17,9 @@ public class MethodCallNode extends com.handen.easyFlowCharts.Nodes.SingleNode {
     }
 
     @Override
-    public Context draw(Context context) {
+    public void draw(Context context) {
         context.drawStrategy(new DrawRectangleStrategy());
         context.drawStrategy(new DrawInnerRectStrategy());
         context.drawStrategy(new DrawTextStrategy(getText()));
-
-        return context;
     }
 }

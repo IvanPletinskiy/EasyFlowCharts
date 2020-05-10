@@ -28,7 +28,7 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
     }
 
     @Override
-    public Context draw(Context context) {
+    public void draw(Context context) {
         context.drawStrategy(new DrawOvalStrategy());
 
         context.drawStrategy(new DrawTextStrategy(getText()));
@@ -43,7 +43,7 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
                 drawTransition(context);
                 height = 0;
             }
-            context = node.draw(context);
+            //context = node.draw(context);
             context.drawStrategy(new DrawArrowStrategy());
             height += node.measureHeight();
             height += DrawConstants.ARROW_LENGTH;
@@ -52,8 +52,6 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
         context.drawStrategy(new DrawOvalStrategy());
 
         context.drawStrategy(new DrawTextStrategy(getClosingBlockText()));
-
-        return context;
     }
 
     private void drawTransition(Context context) {

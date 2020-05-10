@@ -37,7 +37,7 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
     }
 
     @Override
-    public Context draw(Context context) {
+    public void draw(Context context) {
         drawDiamond(context);
         Point diamondPoint = new Point(context.getCurrentPoint());
 
@@ -56,8 +56,6 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
 
         currentPoint.y -= DrawConstants.BLOCK_HEIGHT;
         context.setCurrentPoint(currentPoint);
-
-        return context;
     }
 
     private void drawDiamond(Context context) {

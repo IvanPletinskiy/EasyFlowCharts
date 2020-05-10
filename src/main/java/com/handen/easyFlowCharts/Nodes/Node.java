@@ -16,5 +16,5 @@ public abstract class Node {
 
     public abstract int measureWidth();
 
-    public abstract Context draw(Context context);
+    public abstract void draw(Context context);
 }

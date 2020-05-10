@@ -16,11 +16,9 @@ public class ReturnNode extends SingleNode {
     }
 
     @Override
-    public Context draw(Context context) {
+    public void draw(Context context) {
         context.drawStrategy(new DrawParallelogramStrategy());
 
         context.drawStrategy(new DrawTextStrategy(getText()));
-
-        return context;
     }
 }

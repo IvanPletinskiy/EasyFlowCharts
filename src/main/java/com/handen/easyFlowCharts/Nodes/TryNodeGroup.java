@@ -37,7 +37,7 @@ public class TryNodeGroup extends TwoBranchNodeGroup {
     }
 
     @Override
-    public Context draw(Context context) {
+    public void draw(Context context) {
         drawLeftBranch(context);
 
         Point diamondPoint = new Point(context.getCurrentPoint());
@@ -54,8 +54,6 @@ public class TryNodeGroup extends TwoBranchNodeGroup {
         Point currentPoint = context.getCurrentPoint();
         currentPoint.y -= DrawConstants.BLOCK_HEIGHT;
         context.setCurrentPoint(currentPoint);
-
-        return context;
     }
 
     private void connectBranches(Context context, Point leftBranchEndpoint) {

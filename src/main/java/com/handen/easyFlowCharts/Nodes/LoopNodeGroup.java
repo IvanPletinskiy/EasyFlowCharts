@@ -44,7 +44,7 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
     }
 
     @Override
-    public Context draw(Context context) {
+    public void draw(Context context) {
         context.drawStrategy(new DrawOpenLoopPolygonStrategy());
 
         String openingText = context.getLoopLabelText() + getText();
@@ -60,7 +60,5 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
         context.drawStrategy(new DrawCloseLoopPolygonStrategy());
         String closingText = context.getLoopLabelText() + getClosingBlockText();
         context.drawStrategy(new DrawTextStrategy(closingText));
-
-        return context;
     }
 }
