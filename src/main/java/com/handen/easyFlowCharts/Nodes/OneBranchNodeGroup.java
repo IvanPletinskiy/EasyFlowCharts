@@ -7,18 +7,18 @@ import java.util.List;
 
 public abstract class OneBranchNodeGroup extends NodeGroup {
 
-    private ArrayList<AbstractNode> children = new ArrayList<>();
+    private ArrayList<Node> children = new ArrayList<>();
 
     public OneBranchNodeGroup(String line) {
         super(line);
     }
 
     @Override
-    public void addNode(AbstractNode node) {
+    public void addNode(Node node) {
         children.add(node);
     }
 
-    List<AbstractNode> getChildren() {
+    List<Node> getChildren() {
         return children;
     }
 
@@ -26,8 +26,8 @@ public abstract class OneBranchNodeGroup extends NodeGroup {
 
     @Override
     public int measureWidth() {
-        int width = 0;
-        for(AbstractNode node: children) {
+        int width = DrawConstants.BLOCK_WIDTH;
+        for(Node node: children) {
             if(node.measureWidth() > width) {
                 width = node.measureWidth();
             }
@@ -39,7 +39,7 @@ public abstract class OneBranchNodeGroup extends NodeGroup {
     @Override
     public int measureHeight() {
         int sum = 0;
-        for(AbstractNode child : getChildren()) {
+        for(Node child : getChildren()) {
             sum += child.measureHeight();
         }
         if(children.size() > 0) {

@@ -1,6 +1,6 @@
 package com.handen.easyFlowCharts;
 
-import com.handen.easyFlowCharts.Nodes.AbstractNode;
+import com.handen.easyFlowCharts.Nodes.Node;
 import com.handen.easyFlowCharts.Nodes.IfNodeGroup;
 import com.handen.easyFlowCharts.Nodes.LoopNodeGroup;
 import com.handen.easyFlowCharts.Nodes.MethodCallNode;
@@ -16,7 +16,7 @@ class LineParser {
 
     private ArrayList<String> methodNames = new ArrayList<>();
 
-    public AbstractNode nextNode(String line) {
+    public Node nextNode(String line) {
         if(lineIsMethod(line)) {
             return new MethodNodeGroup(line);
         }

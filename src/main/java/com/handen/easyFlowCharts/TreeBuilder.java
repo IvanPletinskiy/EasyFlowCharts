@@ -1,6 +1,6 @@
 package com.handen.easyFlowCharts;
 
-import com.handen.easyFlowCharts.Nodes.AbstractNode;
+import com.handen.easyFlowCharts.Nodes.Node;
 import com.handen.easyFlowCharts.Nodes.MethodNodeGroup;
 import com.handen.easyFlowCharts.Nodes.NodeGroup;
 import com.handen.easyFlowCharts.Nodes.TwoBranchNodeGroup;
@@ -92,16 +92,16 @@ public class TreeBuilder {
         for(String line : lines) {
             line = line.trim();
             if(isLineValid(line) && !line.contains("}")) {
-                AbstractNode node = lineParser.nextNode(line);
+                Node node = lineParser.nextNode(line);
                 if(node instanceof MethodNodeGroup) {
-                    lineParser.addMethodName(node.getOpeningBlockText());
+                    lineParser.addMethodName(node.getText());
                 }
             }
         }
     }
 
     private void addNode(String line) {
-        AbstractNode node = lineParser.nextNode(line);
+        Node node = lineParser.nextNode(line);
         if(node instanceof NodeGroup) {
             if(!openedNodeGroups.isEmpty()) {
                 openedNodeGroups.peek().addNode(node);

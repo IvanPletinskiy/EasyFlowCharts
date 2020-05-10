@@ -11,7 +11,7 @@ public class StatementNode extends SingleNode {
     }
 
     @Override
-    public String getOpeningBlockText() {
+    public String getText() {
         return line.trim().replace(";", "");
     }
 
@@ -19,7 +19,7 @@ public class StatementNode extends SingleNode {
     public Context draw(Context context) {
         context.drawStrategy(new DrawRectangleStrategy());
 
-        context.drawStrategy(new DrawTextStrategy(getOpeningBlockText()));
+        context.drawStrategy(new DrawTextStrategy(getText()));
         return context;
     }
 }

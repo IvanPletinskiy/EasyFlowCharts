@@ -21,14 +21,14 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
     }
 
     @Override
-    public String getOpeningBlockText() {
+    public String getText() {
         String text = line.substring(line.indexOf("(") + 1, line.lastIndexOf(")"));
         return text;
     }
 
     @Override
-    public void addNode(AbstractNode node) {
-        if(node.getOpeningBlockText().contains("else ") && node.getOpeningBlockText().contains("{")) {
+    public void addNode(Node node) {
+        if(node.getText().contains("else ") && node.getText().contains("{")) {
             setIsFirstBranch(false);
         }
         else {
@@ -38,26 +38,45 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
 
     @Override
     public Context draw(Context context) {
-        //TODO handle else branch width
-
-        context.drawStrategy(new DrawDiamondStrategy());
-
-        context.drawStrategy(new DrawTextStrategy(getOpeningBlockText()));
-
+        drawDiamond(context);
         Point diamondPoint = new Point(context.getCurrentPoint());
 
-
-        context.drawStrategy(new DrawArrowStrategy());
-        //draw left branch
-        drawBranch(context, getSecondBranch());
+        drawLeftBranch(context);
         Point leftBranchEndpoint = new Point(context.getCurrentPoint());
 
-        //draw right branch
+        //Comeback to diamond
         context.setCurrentPoint(diamondPoint);
 
-        context.drawStrategy(new DrawThenArrowStrategy());
-        drawBranch(context, getFirstBranch());
+        drawRightBranch(context);
 
+        connectBranches(context, leftBranchEndpoint);
+
+        context.drawStrategy(new DrawVerticalLineStrategy(DrawConstants.BLOCK_HEIGHT));
+        Point currentPoint = context.getCurrentPoint();
+
+        currentPoint.y -= DrawConstants.BLOCK_HEIGHT;
+        context.setCurrentPoint(currentPoint);
+
+        return context;
+    }
+
+    private void drawDiamond(Context context) {
+        context.drawStrategy(new DrawDiamondStrategy());
+        context.drawStrategy(new DrawTextStrategy(getText()));
+    }
+
+    private void drawRightBranch(Context context) {
+        int leftBranchWidth = measureBranchWidth(getSecondBranch());
+        context.drawStrategy(new DrawThenArrowStrategy(leftBranchWidth));
+        drawBranch(context, getFirstBranch());
+    }
+
+    private void drawLeftBranch(Context context) {
+        context.drawStrategy(new DrawArrowStrategy());
+        drawBranch(context, getSecondBranch());
+    }
+
+    private void connectBranches(Context context, Point leftBranchEndpoint) {
         int leftBranchHeight = measureBranchHeight(getSecondBranch());
         int rightBranchHeight = measureBranchHeight(getFirstBranch());
 
@@ -65,7 +84,6 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
 
         if(leftBranchHeight > rightBranchHeight) {
             context.drawStrategy(new DrawVerticalLineStrategy(diff));
-
             context.drawStrategy(new DrawConnectBranchesArrowStrategy());
             context.setCurrentPoint(leftBranchEndpoint);
         }
@@ -81,13 +99,5 @@ public class IfNodeGroup extends TwoBranchNodeGroup {
                 context.drawStrategy(strategy);
             }
         }
-
-        context.drawStrategy(new DrawVerticalLineStrategy(DrawConstants.BLOCK_HEIGHT));
-        Point currentPoint = context.getCurrentPoint();
-
-        currentPoint.y -= DrawConstants.BLOCK_HEIGHT;
-        context.setCurrentPoint(currentPoint);
-
-        return context;
     }
 }

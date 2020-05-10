@@ -21,7 +21,7 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
     }
 
     @Override
-    public String getOpeningBlockText() {
+    public String getText() {
         String line = super.line.trim();
         int methodNameStartIdx = line.substring(0, line.indexOf("(")).lastIndexOf(" ") + 1;
         return line.substring(methodNameStartIdx).replace("{", "");
@@ -31,13 +31,13 @@ public class  MethodNodeGroup extends OneBranchNodeGroup {
     public Context draw(Context context) {
         context.drawStrategy(new DrawOvalStrategy());
 
-        context.drawStrategy(new DrawTextStrategy(getOpeningBlockText()));
+        context.drawStrategy(new DrawTextStrategy(getText()));
 
         context.drawStrategy(new DrawArrowStrategy());
 
         int height = 0;
 
-        for(AbstractNode node : getChildren()) {
+        for(Node node : getChildren()) {
             //TODO перенести эту логику в FlowchartDrawer
             if(height + node.measureHeight() + DrawConstants.ARROW_LENGTH + DrawConstants.BLOCK_HEIGHT > DrawConstants.LIST_HEIGHT - DrawConstants.LIST_BOTTOM_OFFSET) {
                 drawTransition(context);

@@ -1,18 +1,23 @@
 package com.handen.easyFlowCharts.Nodes;
 
 import com.handen.easyFlowCharts.flowchart.Context;
-import com.handen.easyFlowCharts.flowchart.DrawConstants;
 import com.handen.easyFlowCharts.strategies.DrawArrowStrategy;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.ARROW_LENGTH;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_HEIGHT;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_WIDTH;
+import static com.handen.easyFlowCharts.flowchart.DrawConstants.THEN_ARROW_LENGTH;
 
 public abstract class TwoBranchNodeGroup extends NodeGroup {
     private boolean isFirstBranch = true;
-    private ArrayList<AbstractNode> firstBranch = new ArrayList<>();
-    private ArrayList<AbstractNode> secondBranch = new ArrayList<>();
+    private ArrayList<Node> firstBranch = new ArrayList<>();
+    private ArrayList<Node> secondBranch = new ArrayList<>();
 
     @Override
-    public void addNode(AbstractNode node) {
+    public void addNode(Node node) {
         if(isFirstBranch) {
             firstBranch.add(node);
         }
@@ -21,11 +26,11 @@ public abstract class TwoBranchNodeGroup extends NodeGroup {
         }
     }
 
-    protected ArrayList<AbstractNode> getFirstBranch() {
+    protected ArrayList<Node> getFirstBranch() {
         return firstBranch;
     }
 
-    protected ArrayList<AbstractNode> getSecondBranch() {
+    protected ArrayList<Node> getSecondBranch() {
         return secondBranch;
     }
 
@@ -43,64 +48,63 @@ public abstract class TwoBranchNodeGroup extends NodeGroup {
 
     @Override
     public int measureWidth() {
-        int leftWidth = 0;
-        for(AbstractNode node : firstBranch) {
-            if(node.measureWidth() > leftWidth) {
-                leftWidth = node.measureWidth();
-            }
-        }
+        int leftWidth = measureBranchWidth(firstBranch);
+        int rightWidth = measureBranchWidth(secondBranch);
 
-        int rightWidth = 0;
-        for(AbstractNode node : secondBranch) {
-            if(node.measureWidth() > rightWidth) {
-                rightWidth = node.measureWidth();
-            }
-        }
-
-        int width = leftWidth + DrawConstants.THEN_ARROW_LENGTH + rightWidth;
+        int width = leftWidth + THEN_ARROW_LENGTH - (BLOCK_WIDTH / 2) + rightWidth;
         return width;
     }
 
     @Override
     public int measureHeight() {
         int firstBranchHeight = 0;
-        for(AbstractNode node: firstBranch) {
+        for(Node node : firstBranch) {
             firstBranchHeight += node.measureHeight();
         }
         if(firstBranch.size() > 0) {
-            firstBranchHeight += (firstBranch.size() - 1) * DrawConstants.ARROW_LENGTH;
+            firstBranchHeight += (firstBranch.size() - 1) * ARROW_LENGTH;
         }
 
         int secondBranchHeight = 0;
-        for(AbstractNode node: secondBranch) {
+        for(Node node : secondBranch) {
             secondBranchHeight += node.measureHeight();
         }
         if(secondBranch.size() > 0) {
-            secondBranchHeight += (secondBranch.size() - 1) * DrawConstants.ARROW_LENGTH;
+            secondBranchHeight += (secondBranch.size() - 1) * ARROW_LENGTH;
         }
 
         int childrenHeight = Math.max(firstBranchHeight, secondBranchHeight);
 
-        return DrawConstants.BLOCK_HEIGHT + DrawConstants.ARROW_LENGTH + childrenHeight + DrawConstants.ARROW_LENGTH + DrawConstants.BLOCK_HEIGHT;
+        return BLOCK_HEIGHT + ARROW_LENGTH + childrenHeight + ARROW_LENGTH + BLOCK_HEIGHT;
     }
 
-    protected Context drawBranch(Context context, ArrayList<AbstractNode> nodes) {
-        for(AbstractNode node: nodes) {
+    Context drawBranch(Context context, ArrayList<Node> nodes) {
+        for(Node node : nodes) {
             node.draw(context);
             context.drawStrategy(new DrawArrowStrategy());
         }
         return context;
     }
 
-    protected int measureBranchHeight(ArrayList<AbstractNode> nodes) {
+    int measureBranchHeight(ArrayList<Node> nodes) {
         int sum = 0;
-        for(AbstractNode node: nodes) {
+        for(Node node : nodes) {
             sum += node.measureHeight();
         }
 
         if(!nodes.isEmpty()) {
-            sum += (nodes.size() - 1) * DrawConstants.ARROW_LENGTH;
+            sum += (nodes.size() - 1) * ARROW_LENGTH;
         }
         return sum;
+    }
+
+    protected int measureBranchWidth(List<Node> branch) {
+        int width = BLOCK_WIDTH;
+        for(Node node : branch) {
+            if(node.measureWidth() > width) {
+                width = node.measureWidth();
+            }
+        }
+        return width;
     }
 }

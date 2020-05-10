@@ -19,12 +19,13 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
             //for
             int lastSemicolonIndex = line.lastIndexOf(';');
             String action = line.substring(lastSemicolonIndex + 1, line.lastIndexOf(")"));
+            text = action;
         }
         return text;
     }
 
     @Override
-    public String getOpeningBlockText() {
+    public String getText() {
         String text;
         if(line.contains("for") && !line.contains(":")) {
             //for
@@ -46,12 +47,12 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
     public Context draw(Context context) {
         context.drawStrategy(new DrawOpenLoopPolygonStrategy());
 
-        String openingText = context.getLoopLabelText() + getOpeningBlockText();
+        String openingText = context.getLoopLabelText() + getText();
         context.drawStrategy(new DrawTextStrategy(openingText));
 
         context.drawStrategy(new DrawArrowStrategy());
 
-        for(AbstractNode node : getChildren()) {
+        for(Node node : getChildren()) {
             node.draw(context);
             context.drawStrategy(new DrawArrowStrategy());
         }
@@ -59,6 +60,7 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
         context.drawStrategy(new DrawCloseLoopPolygonStrategy());
         String closingText = context.getLoopLabelText() + getClosingBlockText();
         context.drawStrategy(new DrawTextStrategy(closingText));
+
         return context;
     }
 }

@@ -11,7 +11,7 @@ public class ReturnNode extends SingleNode {
     }
 
     @Override
-    public String getOpeningBlockText() {
+    public String getText() {
         return line.replace(";", "");
     }
 
@@ -19,7 +19,7 @@ public class ReturnNode extends SingleNode {
     public Context draw(Context context) {
         context.drawStrategy(new DrawParallelogramStrategy());
 
-        context.drawStrategy(new DrawTextStrategy(getOpeningBlockText()));
+        context.drawStrategy(new DrawTextStrategy(getText()));
 
         return context;
     }

@@ -2,7 +2,7 @@ package com.handen.easyFlowCharts.Nodes;
 
 import com.handen.easyFlowCharts.flowchart.DrawConstants;
 
-public abstract class SingleNode extends AbstractNode {
+public abstract class SingleNode extends Node {
 
     public SingleNode(String line) {
         super(line);

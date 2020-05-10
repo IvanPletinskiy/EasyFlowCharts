@@ -12,17 +12,15 @@ public class MethodCallNode extends com.handen.easyFlowCharts.Nodes.SingleNode {
     }
 
     @Override
-    public String getOpeningBlockText() {
+    public String getText() {
         return line.trim().substring(0, line.length() - 1);
     }
 
     @Override
     public Context draw(Context context) {
         context.drawStrategy(new DrawRectangleStrategy());
-
         context.drawStrategy(new DrawInnerRectStrategy());
-
-        context.drawStrategy(new DrawTextStrategy(getOpeningBlockText()));
+        context.drawStrategy(new DrawTextStrategy(getText()));
 
         return context;
     }
