@@ -1,5 +1,88 @@
 public class FlowchartTest {
-/*
+    /*
+    private static void testWhile() {
+        int a  = 123;
+        while(a == 123) {
+            String s = "abc";
+            int b = 234;
+        }
+        int c = 345;
+    }
+
+    private static final void testFor() {
+        int a  = 123;
+        for(int i = 0; i < 10; i ++) {
+            String s = "abc";
+            if(i < 5) {
+                System.out.println("Less than five");
+            }
+            else {
+                System.out.println("Greater than five");
+            }
+        }
+        int b = 234;
+    }
+
+    private static void testForEach() {
+        String s = "abc";
+        for(char c: s.toCharArray()) {
+            c += 15;
+            System.out.println(c);
+        }
+        int a = 123;
+    }
+
+    private static void testLongMethod() {
+        int a = 123;
+        if(a == 123) {
+            for(int i = 0; i < a; i++) {
+                if(i % 2 == 0) {
+                    System.out.println(i);
+                }
+            }
+        }
+        if(condition1) {
+            try {
+                suspiciousOperation();
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        while(a == 123) {
+            System.out.println("Inside loop");
+            a--;
+        }
+        if(condition2) {
+            if(condition3) {
+                operation1();
+                operation2();
+                operation3();
+            }
+        }
+        else {
+            if(condition4) {
+                operation5();
+            }
+        }
+    }
+
+    private static void testLongBlock() {
+        String aVeryLongIndentificator = "A very long string";
+
+    }
+
+    private static int testReturn() {
+        String a = "abc";
+        if(true) {
+            a = "bcd";
+        }
+        else {
+            a = "123";
+        }
+        return a;
+    }
+
     private static void testIfElseIf() {
         int a = 123;
         if(condition1) {
@@ -43,7 +126,7 @@ public class FlowchartTest {
         int a = 123;
         if(condition) {
             int c = 321;
-            try{
+            try {
                 suspiciousOperation();
             }
             catch(IOException e) {
@@ -55,135 +138,6 @@ public class FlowchartTest {
             int e = 543;
         }
         int b = 321;
-    }
-
-    private static void testIf() {
-        if(condition) {
-            int a = 123;
-        }
-        else {
-            int b = 321;
-        }
-    }
-
-    private static void testIfLeft() {
-        if(condition) {
-            int a = 123;
-        }
-        else {
-            int b = 321;
-            String c = "abc";
-        }
-    }
-
-    private static void testIfRight() {
-        if(condition) {
-            int a = 123;
-            String c = "abc";
-        }
-        else {
-            int b = 321;
-        }
-    }
-
-    private static void testIfNoElse() {
-        int a = 123;
-        if(condition) {
-            doSmth();
-        }
-        int b = 321;
-    }
-
-    private static void testInnerIf() {
-        if(condition) {
-            int a = 123;
-            if(condition2) {
-                int b = 321;
-            }
-        }
-        else {
-            int c = 432;
-        }
-        int e = 543;
-    }
-
-    private static void readInput() {
-        boolean isReaded = false;
-        while(!isReaded) {
-            System.out.println("Выберите способ вводить данные. 0 - ввод с клавиатуры, 1 - ввод с файла \"input.txt\"");
-            String line = reader.readLine().trim();
-            if(Integer.parseInt(line) == 0) {
-                try {
-                    readFromKeyboard();
-                }
-                catch(IOException e) {
-                    e.printStackTrace();
-                    System.out.println("Произошла ошибка, повторите ввод");
-                }
-            }
-            else {
-                if(Integer.parseInt(line) == 1) {
-                    try {
-                        readFromFile();
-                    }
-                    catch(IOException e) {
-                        e.printStackTrace();
-                        System.out.println("Произошла ошибка, повторите ввод");
-                    }
-                }
-            }
-            isReaded = checkIsInputCorrect();
-        }
-    }
-
-    private static boolean checkIsInputCorrect() {
-        boolean isCorrect =  !input.isEmpty();
-        for(char c : input.toCharArray()) {
-            if(c != ' ' && !Character.isDigit(c)) {
-                isCorrect = false;
-            }
-        }
-        return isCorrect;
-    }
-
-    private static void solve() {
-        int count = 0;
-        boolean isCorrect = true;
-        char[] chars = input.toCharArray();
-        for(char c : chars) {
-            if(c != '(') {
-                if(c == ')') {
-                    count--;
-                }
-            }
-            else {
-                count++;
-            }
-            if(count < 0) {
-                isCorrect = false;
-            }
-        }
-        if(isCorrect && count == 0) {
-            result = "Сбалансированная \nпоследовательность";
-        }
-        else {
-            result = "Несбалансированная последовательность";
-        }
-    }
-
-    private static void printResult() {
-        System.out.println(result);
-    }
-
-    private static void readFromFile() throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(new File("C:/Projects/Block3/src/com/handen/input.txt"));
-        BufferedReader fileReader = new BufferedReader(new InputStreamReader(fileInputStream));
-        input = fileReader.readLine();
-    }
-
-    private static void readFromKeyboard() throws IOException {
-        System.out.println("Введите последовательность в одну строку:");
-        input = reader.readLine();
     }
      */
 }

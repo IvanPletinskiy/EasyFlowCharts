@@ -10,8 +10,8 @@ public class DrawConstants {
     public static final int LIST_HEIGHT = 3508;
     public static final int LIST_LEFT_OFFSET = 100;
     public static final int LIST_RIGHT_OFFSET = 100;
-    public static final int LIST_TOP_OFFSET = 250;
-    public static final int LIST_BOTTOM_OFFSET = 250;
+    public static final int LIST_TOP_OFFSET = 100;
+    public static final int LIST_BOTTOM_OFFSET = 100;
 
     public static final int COLUMN_SPACE = 200;
 
@@ -25,7 +25,7 @@ public class DrawConstants {
     public static final int FONT_SIZE = 28;
     public static final Font FONT = Font.font("Verdana", FONT_SIZE);
     public static final int MAX_SYMBOLS_IN_LINE = 25;
-    public static final int LINE_MARGIN = 2;
+    public static final int LINE_MARGIN = 4;
     public static final int LINE_WIDTH = 2;
     public static final int METHOD_OFFSET = 200;
 }

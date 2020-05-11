@@ -19,25 +19,26 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
             //for
             int lastSemicolonIndex = line.lastIndexOf(';');
             String action = line.substring(lastSemicolonIndex + 1, line.lastIndexOf(")"));
-            text = action;
+            text = "\n" + action;
         }
         return text;
     }
 
     @Override
     public String getText() {
-        String text;
+        String text = "\n";
         if(line.contains("for") && !line.contains(":")) {
             //for
-            int firstSemicolonIndex = line.indexOf(';');
-            String initialization = line.substring(line.indexOf("(") + 1, firstSemicolonIndex);
-            int secondSemicolonIndex = line.indexOf(';', firstSemicolonIndex + 1);
-            String condition = line.substring(secondSemicolonIndex + 1, line.lastIndexOf(";"));
-            text = initialization + condition;
+            int lastSemicolonIndex = line.lastIndexOf(';');
+            text += line.substring(line.indexOf("(") + 1, lastSemicolonIndex);
         }
         else {
             //while, foreach
-            text = line.substring(line.indexOf("(") + 1, line.lastIndexOf(")"));
+            text += line.substring(line.indexOf("(") + 1, line.lastIndexOf(")"));
+        }
+        if(line.contains(":")) {
+            //foreach
+            text = text.replace("\n", "\t");
         }
 
         return text;
@@ -45,9 +46,11 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
 
     @Override
     public void draw(Context context) {
+        String loopLabel = context.getLoopLabelText();
         context.drawStrategy(new DrawOpenLoopPolygonStrategy());
 
-        String openingText = context.getLoopLabelText() + getText();
+        String openingText = loopLabel + getText();
+
         context.drawStrategy(new DrawTextStrategy(openingText));
 
         context.drawStrategy(new DrawArrowStrategy());
@@ -58,7 +61,7 @@ public class LoopNodeGroup extends OneBranchNodeGroup {
         }
 
         context.drawStrategy(new DrawCloseLoopPolygonStrategy());
-        String closingText = context.getLoopLabelText() + getClosingBlockText();
+        String closingText = loopLabel + getClosingBlockText();
         context.drawStrategy(new DrawTextStrategy(closingText));
     }
 }
