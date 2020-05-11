@@ -18,6 +18,7 @@
 <AnchorPane prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handen.easyFlowCharts.mainScreen.MainController">
 
     <MenuBar>
+        <!--
         <Menu text="About">
             <MenuItem fx:id="menu_about" onAction="#OnMenuAboutClicked" text="About">
                 <accelerator>
@@ -25,6 +26,7 @@
                 </accelerator>
             </MenuItem>
         </Menu>
+        -->
         <Menu text="Help">
             <MenuItem fx:id="menu_help" onAction="#OnMenuHelpClicked" text="Help">
                 <accelerator>
@@ -46,7 +48,7 @@
             </VBox.margin>
         </Label>
         <HBox prefHeight="100.0" prefWidth="200.0">
-            <TextField fx:id="source_text_area" prefHeight="39.0" prefWidth="526.0">
+            <TextField fx:id="source_text_area" prefHeight="39.0" prefWidth="526.0" focusTraversable="false">
                 <font>
                     <Font size="18.0" />
                 </font>
@@ -84,7 +86,7 @@
             </VBox.margin>
         </Label>
         <HBox prefHeight="100.0" prefWidth="200.0">
-            <TextField fx:id="save_text_area" layoutX="60.0" layoutY="252.0" prefHeight="39.0" prefWidth="526.0">
+            <TextField fx:id="save_text_area" layoutX="60.0" layoutY="252.0" prefHeight="39.0" prefWidth="526.0" focusTraversable="false">
                 <font>
                     <Font size="18.0" />
                 </font>

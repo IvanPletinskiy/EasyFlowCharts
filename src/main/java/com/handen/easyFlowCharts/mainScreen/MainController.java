@@ -93,7 +93,7 @@ public class MainController implements Initializable {
 
     }
 
-    public void onCreateButtonClicked(ActionEvent actionEvent) throws Exception {
+    public void onCreateButtonClicked(ActionEvent event) {
         boolean isInputValid = validateInput();
         if(isInputValid) {
             create_button.setVisible(false);
@@ -148,7 +148,7 @@ public class MainController implements Initializable {
         for(int i = 0; i < fileList.size(); i++) {
             File file = fileList.get(i);
 
-            double progress = i / ((double) filesCount);
+            double progress = i / ((double) filesCount - 1);
             String message = String.format("Parsing file:%s", file.getName());
             updateProgressOnUIThread(progress, message);
 
@@ -157,24 +157,9 @@ public class MainController implements Initializable {
             FileMethodsPair pair = new FileMethodsPair(file, methods);
             filesMethodPairs.add(pair);
         }
+        updateProgressOnUIThread(1.0, "Parsing files Done");
 
         return filesMethodPairs;
-    }
-
-    private void updateProgressOnUIThread(double progress, String message) {
-        long currentMillis = new Date().getTime();
-        if(currentMillis - lastProgressUpdateMillis > 250) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    progress_bar.setProgress(progress);
-                    progress_description_label.setText(message);
-                    int percent = (int) (progress * 100);
-                    progress_percent_label.setText(percent + "%");
-                    lastProgressUpdateMillis = new Date().getTime();
-                }
-            });
-        }
     }
 
     private void drawFlowchart(List<FileMethodsPair> fileMethodsPairList) {
@@ -196,9 +181,18 @@ public class MainController implements Initializable {
                 saveCanvases(new LinkedList<>(fileCanvases), 0, fileCanvases.size());
             }
         }
-        if(isSaving.get()) {
-            updateProgressOnUIThread(1.0, "Flowchart drawing done.");
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(50);
+                }
+                catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+                updateProgressOnUIThread(1.0, "Flowchart drawing done.");
+            }
+        });
     }
 
     private void saveCanvases(Queue<Canvas> canvases, final int count, final int total) {
@@ -232,6 +226,22 @@ public class MainController implements Initializable {
         WritableImage snapshot = canvas.snapshot(null, null);
         BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
         return image;
+    }
+
+    private void updateProgressOnUIThread(double progress, String message) {
+        long currentMillis = new Date().getTime();
+        if(currentMillis - lastProgressUpdateMillis > 250) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    progress_bar.setProgress(progress);
+                    progress_description_label.setText(message);
+                    int percent = (int) (progress * 100);
+                    progress_percent_label.setText(percent + "%");
+                    lastProgressUpdateMillis = new Date().getTime();
+                }
+            });
+        }
     }
 
     private void cleanOutputDirectory() {
