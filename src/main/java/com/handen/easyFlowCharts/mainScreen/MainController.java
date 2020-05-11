@@ -69,6 +69,7 @@ public class MainController implements Initializable {
     private static final String ERROR_CANNOT_OPEN = "Error! Сannot open directory.";
     private static final String ERROR_DOES_NOT_EXISTS = "Error! Directory doesn't exists.";
     private static final String ERROR_NOT_JAVA_FILE = "Entered file is not a .java file.";
+    private static final String FIELD_CANNOT_BE_EMPTY = "Input field cannot be empty.";
     private long lastProgressUpdateMillis = -1;
     private FlowchartController flowchartController;
 
@@ -180,10 +181,8 @@ public class MainController implements Initializable {
         FlowchartDrawer flowchartDrawer = new FlowchartDrawer();
         updateProgressOnUIThread(0, "Drawing flowchart");
 
-        //        List<Canvas> canvases = new LinkedList<>();
         for(var pair : fileMethodsPairList) {
             List<Canvas> fileCanvases = flowchartDrawer.drawFile(pair);
-            //canvases.addAll(fileCanvases);
 
             Platform.runLater(new Runnable() {
                 @Override
@@ -289,13 +288,20 @@ public class MainController implements Initializable {
     private boolean validateSourcePath() {
         boolean isValid;
         String path = source_text_area.getText();
-        File file = new File(path);
-        if(!file.isDirectory() && !file.getName().contains(".java")) {
-            source_error_text.setText(ERROR_NOT_JAVA_FILE);
+        boolean isEmpty = path.isEmpty();
+        if(isEmpty) {
+            source_error_text.setText(FIELD_CANNOT_BE_EMPTY);
             isValid = false;
         }
         else {
-            isValid = validate(file, source_error_text);
+            File file = new File(path);
+            if(!file.isDirectory() && !file.getName().contains(".java")) {
+                source_error_text.setText(ERROR_NOT_JAVA_FILE);
+                isValid = false;
+            }
+            else {
+                isValid = validate(file, source_error_text);
+            }
         }
         return isValid;
     }
@@ -303,13 +309,20 @@ public class MainController implements Initializable {
     private boolean validateSavePath() {
         boolean isValid;
         String path = save_text_area.getText();
-        File file = new File(path);
-        if(!file.isDirectory()) {
-            save_error_text.setText(ERROR_NOT_DIRECTORY);
+        boolean isEmpty = path.isEmpty();
+        if(isEmpty) {
+            save_error_text.setText(FIELD_CANNOT_BE_EMPTY);
             isValid = false;
         }
         else {
-            isValid = validate(file, save_error_text);
+            File file = new File(path);
+            if(!file.isDirectory()) {
+                save_error_text.setText(ERROR_NOT_DIRECTORY);
+                isValid = false;
+            }
+            else {
+                isValid = validate(file, save_error_text);
+            }
         }
 
         return isValid;

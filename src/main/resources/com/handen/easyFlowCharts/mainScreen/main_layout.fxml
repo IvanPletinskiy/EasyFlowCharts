@@ -37,7 +37,7 @@
         <padding>
             <Insets left="50.0" right="50.0" />
         </padding>
-        <Label text="Enter path of folder with source files:">
+        <Label text="Enter path of folder with source files or a .java file:">
             <font>
                 <Font size="18.0" />
             </font>
