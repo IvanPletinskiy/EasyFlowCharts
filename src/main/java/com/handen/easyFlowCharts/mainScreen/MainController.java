@@ -1,7 +1,7 @@
 package com.handen.easyFlowCharts.mainScreen;
 
 import com.handen.easyFlowCharts.Nodes.MethodNodeGroup;
-import com.handen.easyFlowCharts.TreeBuilder;
+import com.handen.easyFlowCharts.GraphBuilder;
 import com.handen.easyFlowCharts.flowChartScreen.FlowchartController;
 import com.handen.easyFlowCharts.flowchart.FlowchartDrawer;
 import com.handen.easyFlowCharts.utils.FileMethodsPair;
@@ -62,7 +62,6 @@ public class MainController implements Initializable {
     public ProgressBar progress_bar;
     public Label progress_percent_label;
     public Label progress_description_label;
-    private Stage stage;
     private static final String TITLE_CHOOSE_SOURCE_DIRECTORY = "Choose source files directory";
     private static final String TITLE_SAVE_DIRECTORY = "Choose save directory";
     private static final String ERROR_NOT_DIRECTORY = "Entered path isn't a directory.";
@@ -131,7 +130,7 @@ public class MainController implements Initializable {
         String startPath = source_text_area.getText();
         new Thread(() -> {
             if(isSaving.get()) {
-                updateProgressOnUIThread(0, "Clearing output directory");
+                updateProgressOnUIThread(0, "Clearing output directory.");
                 cleanOutputDirectory();
             }
             var filesMap = createFilesMethodsPairs(startPath);
@@ -140,24 +139,24 @@ public class MainController implements Initializable {
     }
 
     private List<FileMethodsPair> createFilesMethodsPairs(String startPath) {
-        updateProgressOnUIThread(0, "Getting all files in directories");
+        updateProgressOnUIThread(0, "Getting all files in directories.");
 
         List<File> fileList = getFilesList(startPath);
         int filesCount = fileList.size();
         List<FileMethodsPair> filesMethodPairs = new LinkedList<>();
-        for(int i = 0; i < fileList.size(); i++) {
+        for(int i = 0; i < filesCount; i++) {
             File file = fileList.get(i);
 
             double progress = i / ((double) filesCount - 1);
             String message = String.format("Parsing file:%s", file.getName());
             updateProgressOnUIThread(progress, message);
 
-            TreeBuilder treeBuilder = new TreeBuilder(file);
-            List<MethodNodeGroup> methods = treeBuilder.parseFile();
+            GraphBuilder graphBuilder = new GraphBuilder(file);
+            List<MethodNodeGroup> methods = graphBuilder.parseFile();
             FileMethodsPair pair = new FileMethodsPair(file, methods);
             filesMethodPairs.add(pair);
         }
-        updateProgressOnUIThread(1.0, "Parsing files Done");
+        updateProgressOnUIThread(1.0, "Parsing files Done.");
 
         return filesMethodPairs;
     }

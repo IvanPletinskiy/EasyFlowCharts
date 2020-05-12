@@ -12,7 +12,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="easy_flow_charts" target="11" />
-      <module name="EasyFlowCharts" target="10" />
+      <module name="EasyFlowCharts" target="12" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -10,28 +10,27 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-public class TreeBuilder {
+public class GraphBuilder {
     private File file;
-    private List<String> lines;
     private Stack<NodeGroup> openedNodeGroups;
     private List<MethodNodeGroup> methodAbstractNodes;
     private LineParser lineParser;
 
-    public TreeBuilder(File file) {
+    public GraphBuilder(File file) {
         this.file = file;
-        this.lines = new LinkedList<>();
         openedNodeGroups = new Stack<>();
         methodAbstractNodes = new LinkedList<>();
         lineParser = new LineParser();
     }
 
     public List<MethodNodeGroup> parseFile() {
-        readFile();
-        addAllMethodNames();
+        List<String> lines = readFile();
+        addAllMethodNames(lines);
 
         for(int i = 0; i < lines.size(); i++) {
             String line = lines.get(i).trim();
@@ -61,8 +60,9 @@ public class TreeBuilder {
         return methodAbstractNodes;
     }
 
-    private void readLines() throws IOException {
+    private List<String> readLines() throws IOException {
         FileReader fileReader = null;
+        List<String> lines = new LinkedList<>();
         try {
             fileReader = new FileReader(file);
         }
@@ -76,19 +76,23 @@ public class TreeBuilder {
                 lines.add(s);
             }
         }
+        return lines;
     }
 
-    private void readFile() {
+    private List<String> readFile() {
+        List<String> lines = Collections.emptyList();
         try {
-            readLines();
+            lines = readLines();
         }
         catch(IOException e) {
             System.err.println("Cannot read from file: " + file.toString());
             e.printStackTrace();
         }
+
+        return lines;
     }
 
-    private void addAllMethodNames() {
+    private void addAllMethodNames(List<String> lines) {
         for(String line : lines) {
             line = line.trim();
             if(isLineValid(line) && !line.contains("}")) {
