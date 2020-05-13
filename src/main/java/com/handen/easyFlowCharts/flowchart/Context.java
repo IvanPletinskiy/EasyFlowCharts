@@ -13,14 +13,12 @@ public class Context {
     private Point currentPoint;
     private int loopNumber;
     private int referenceIndex;
-    private int column;
 
-    public Context(GraphicsContext gc, int currentX, int currentY, int loopNumber, int referenceIndex) {
+    public Context(GraphicsContext gc, Point startPoint, int loopNumber, int referenceIndex) {
         this.gc = gc;
-        this.currentPoint = new Point(currentX, currentY);
+        this.currentPoint = startPoint;
         this.loopNumber = loopNumber;
         this.referenceIndex = referenceIndex;
-        this.column = 0;
     }
 
     public void drawStrategy(DrawStrategy strategy) {
@@ -35,7 +33,7 @@ public class Context {
         this.currentPoint = new Point(currentPoint);
     }
 
-    //TODO перенести логику в FlowchartDrawer
+
     public void goToNextColumn(int previousColumnWidth) {
         int x = LIST_LEFT_OFFSET + currentPoint.x + previousColumnWidth;
         x += DrawConstants.COLUMN_SPACE;

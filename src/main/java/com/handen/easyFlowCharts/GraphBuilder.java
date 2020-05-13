@@ -1,7 +1,7 @@
 package com.handen.easyFlowCharts;
 
-import com.handen.easyFlowCharts.Nodes.Node;
 import com.handen.easyFlowCharts.Nodes.MethodNodeGroup;
+import com.handen.easyFlowCharts.Nodes.Node;
 import com.handen.easyFlowCharts.Nodes.NodeGroup;
 import com.handen.easyFlowCharts.Nodes.TwoBranchNodeGroup;
 
@@ -37,19 +37,8 @@ public class GraphBuilder {
             if(isLineValid(line)) {
                 if(line.equals("}")) {
                     if(i != lines.size() - 1 && !openedNodeGroups.isEmpty()) {
-                        if(openedNodeGroups.peek() instanceof TwoBranchNodeGroup) {
-                            TwoBranchNodeGroup twoBranchNodeGroup = (TwoBranchNodeGroup) openedNodeGroups.peek();
-                            String nextLine = lines.get(i + 1);
-                            if(isBracketClosingBranch(nextLine) && twoBranchNodeGroup.isFirstBranch()) {
-                                twoBranchNodeGroup.setIsFirstBranch(false);
-                            }
-                            else {
-                                closeNodeGroup();
-                            }
-                        }
-                        else {
-                            closeNodeGroup();
-                        }
+                        String nextLine = lines.get(i + 1);
+                        handleEndBracket(nextLine);
                     }
                 }
                 else {
@@ -58,6 +47,34 @@ public class GraphBuilder {
             }
         }
         return methodAbstractNodes;
+    }
+
+    private void handleEndBracket(String nextLine) {
+        if(openedNodeGroups.peek() instanceof TwoBranchNodeGroup) {
+            TwoBranchNodeGroup twoBranchNodeGroup = (TwoBranchNodeGroup) openedNodeGroups.peek();
+            if(isBracketClosingBranch(nextLine) && twoBranchNodeGroup.isFirstBranch()) {
+                twoBranchNodeGroup.setIsFirstBranch(false);
+            }
+            else {
+                closeNodeGroup();
+            }
+        }
+        else {
+            closeNodeGroup();
+        }
+    }
+
+    private void addNode(String line) {
+        Node node = lineParser.nextNode(line);
+        if(node instanceof NodeGroup) {
+            if(!openedNodeGroups.isEmpty()) {
+                openedNodeGroups.peek().addNode(node);
+            }
+            openedNodeGroups.push((NodeGroup) node);
+        }
+        else {
+            openedNodeGroups.peek().addNode(node);
+        }
     }
 
     private List<String> readLines() throws IOException {
@@ -101,19 +118,6 @@ public class GraphBuilder {
                     lineParser.addMethodName(node.getText());
                 }
             }
-        }
-    }
-
-    private void addNode(String line) {
-        Node node = lineParser.nextNode(line);
-        if(node instanceof NodeGroup) {
-            if(!openedNodeGroups.isEmpty()) {
-                openedNodeGroups.peek().addNode(node);
-            }
-            openedNodeGroups.push((NodeGroup) node);
-        }
-        else {
-            openedNodeGroups.peek().addNode(node);
         }
     }
 

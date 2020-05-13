@@ -71,6 +71,7 @@ public class MainController implements Initializable {
     private static final String FIELD_CANNOT_BE_EMPTY = "Input field cannot be empty.";
     private long lastProgressUpdateMillis = -1;
     private FlowchartController flowchartController;
+    private Stage stage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -167,29 +168,20 @@ public class MainController implements Initializable {
 
         for(var pair : fileMethodsPairList) {
             List<Canvas> fileCanvases = flowchartDrawer.drawFile(pair);
+            addCanvases(fileCanvases);
 
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    flowchartController.addCanvases(fileCanvases);
-                    fileCanvases.clear();
-
-                }
-            });
             if(isSaving.get()) {
                 saveCanvases(new LinkedList<>(fileCanvases), 0, fileCanvases.size());
             }
         }
-        new Thread(new Runnable() {
+    }
+
+    private void addCanvases(List<Canvas> fileCanvases) {
+        Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(50);
-                }
-                catch(InterruptedException e) {
-                    e.printStackTrace();
-                }
-                updateProgressOnUIThread(1.0, "Flowchart drawing done.");
+                flowchartController.addCanvases(fileCanvases);
+                fileCanvases.clear();
             }
         });
     }
