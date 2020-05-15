@@ -122,7 +122,7 @@ public class MainController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Flowchart");
             flowchartController.setStage(stage);
-            stage.setScene(new Scene(root, 600, 900));
+            stage.setScene(new Scene(root, 900, 900));
             stage.show();
         }
     }

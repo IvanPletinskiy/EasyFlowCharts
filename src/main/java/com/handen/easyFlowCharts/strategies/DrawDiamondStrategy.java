@@ -25,7 +25,7 @@ public class DrawDiamondStrategy implements DrawStrategy{
         int yesY = (int) (p.y + BLOCK_HEIGHT * 0.3);
         gc.fillText("да", yesX, yesY, BLOCK_WIDTH);
         //Draw no to the left of bottom arrow
-        int noX = (int) (p.x + BLOCK_WIDTH * 0.4);
+        int noX = (int) (p.x + BLOCK_WIDTH * 0.35);
         int noY = (int) (p.y + BLOCK_HEIGHT * 1.2);
         gc.fillText("нет", noX, noY, BLOCK_WIDTH);
         return p;

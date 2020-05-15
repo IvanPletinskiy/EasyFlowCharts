@@ -18,13 +18,13 @@ import java.util.Stack;
 public class GraphBuilder {
     private File file;
     private Stack<NodeGroup> openedNodeGroups;
-    private List<MethodNodeGroup> methodAbstractNodes;
+    private List<MethodNodeGroup> methodNodes;
     private LineParser lineParser;
 
     public GraphBuilder(File file) {
         this.file = file;
         openedNodeGroups = new Stack<>();
-        methodAbstractNodes = new LinkedList<>();
+        methodNodes = new LinkedList<>();
         lineParser = new LineParser();
     }
 
@@ -46,7 +46,7 @@ public class GraphBuilder {
                 }
             }
         }
-        return methodAbstractNodes;
+        return methodNodes;
     }
 
     private void handleEndBracket(String nextLine) {
@@ -128,7 +128,7 @@ public class GraphBuilder {
     private void closeNodeGroup() {
         NodeGroup endedNodeGroup = openedNodeGroups.pop();
         if(openedNodeGroups.isEmpty()) {
-            methodAbstractNodes.add((MethodNodeGroup) endedNodeGroup);
+            methodNodes.add((MethodNodeGroup) endedNodeGroup);
         }
     }
 

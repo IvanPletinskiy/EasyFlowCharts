@@ -1,5 +1,22 @@
 public class FlowchartTest {
     /*
+
+    private static void testIfElseIf(int a, int b) {
+        int result = 0;
+        if(a > b) {
+            result = 1;
+        }
+        else {
+            if(a < b) {
+                result = -1;
+            }
+            else {
+                result = 0;
+            }
+        }
+        return a;
+    }
+
     private static void testWhile() {
         int a  = 123;
         while(a == 123) {
@@ -32,43 +49,8 @@ public class FlowchartTest {
         int a = 123;
     }
 
-    private static void testLongMethod() {
-        int a = 123;
-        if(a == 123) {
-            for(int i = 0; i < a; i++) {
-                if(i % 2 == 0) {
-                    System.out.println(i);
-                }
-            }
-        }
-        if(condition1) {
-            try {
-                suspiciousOperation();
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        while(a == 123) {
-            System.out.println("Inside loop");
-            a--;
-        }
-        if(condition2) {
-            if(condition3) {
-                operation1();
-                operation2();
-                operation3();
-            }
-        }
-        else {
-            if(condition4) {
-                operation5();
-            }
-        }
-    }
-
     private static void testLongBlock() {
-        String aVeryLongIndentificator = "A very long string";
+        String longIndentificator = "A very long string";
 
     }
 
@@ -83,22 +65,6 @@ public class FlowchartTest {
         return a;
     }
 
-    private static void testIfElseIf() {
-        int a = 123;
-        if(condition1) {
-            a = 234;
-        }
-        else {
-            if(condition2) {
-                a =  345;
-            }
-            else {
-                a = 456;
-            }
-        }
-        String b = "abc";
-    }
-
     private static void testTry() {
         int a = 123;
         try{
@@ -109,17 +75,6 @@ public class FlowchartTest {
             System.out.println("Произошла ошибка, повторите ввод");
         }
         int b = 321;
-    }
-
-    private static void testIfElseIf() {
-        if(condition1) {
-            int a = 123;
-        }
-        else {
-            if(condition2) {
-                int b = 321;
-            }
-        }
     }
 
     private static void testTryInIf() {

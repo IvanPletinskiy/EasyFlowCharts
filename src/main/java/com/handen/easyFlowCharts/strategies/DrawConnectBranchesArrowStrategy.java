@@ -1,5 +1,6 @@
 package com.handen.easyFlowCharts.strategies;
 
+import com.handen.easyFlowCharts.flowchart.DrawConstants;
 import com.handen.easyFlowCharts.utils.Point;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -7,9 +8,6 @@ import javafx.scene.canvas.GraphicsContext;
 import static com.handen.easyFlowCharts.flowchart.DrawConstants.BLOCK_WIDTH;
 
 public class DrawConnectBranchesArrowStrategy implements DrawStrategy {
-
-    private static final int ARROW_LENGTH_X = 16;
-    private static final int ARROW_LENGTH_Y = 8;
 
     private Point leftBranchEndpoint;
 
@@ -26,11 +24,11 @@ public class DrawConnectBranchesArrowStrategy implements DrawStrategy {
 
         p.x = endX;
 
-        int x2 = p.x + ARROW_LENGTH_X;
-        int y2 = p.y - ARROW_LENGTH_Y;
+        int x2 = p.x + DrawConstants.ARROW_LENGTH_X;
+        int y2 = p.y - DrawConstants.ARROW_LENGTH_Y;
 
-        int x3 = p.x + ARROW_LENGTH_X;
-        int y3 = p.y + ARROW_LENGTH_Y;
+        int x3 = p.x + DrawConstants.ARROW_LENGTH_X;
+        int y3 = p.y + DrawConstants.ARROW_LENGTH_Y;
 
         gc.fillPolygon(new double[]{p.x, x2, x3}, new double[]{p.y, y2, y3}, 3);
         return p;
