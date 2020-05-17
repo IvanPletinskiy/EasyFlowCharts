@@ -1,4 +1,4 @@
-package com.handen.easyFlowCharts;
+package com.handen.easyFlowCharts.flowchart;
 
 import com.handen.easyFlowCharts.Nodes.MethodNodeGroup;
 import com.handen.easyFlowCharts.Nodes.Node;
