@@ -21,9 +21,18 @@ public class DrawTextStrategy implements DrawStrategy {
     @Override
     public Point draw(GraphicsContext gc, Point p) {
         ArrayList<String> lines = new ArrayList<>();
+        if(text.contains("\n")) {
+            String line =  text.substring(0, text.indexOf("\n"));
+            lines.add(line);
+            text = text.substring(text.indexOf("\n") + 1);
+        }
         boolean isDividable = true;
         while(text.length() > DrawConstants.MAX_SYMBOLS_IN_LINE && isDividable) {
-            int dividerIndex = Math.max(text.lastIndexOf(" ", DrawConstants.MAX_SYMBOLS_IN_LINE - 1), text.lastIndexOf(".", DrawConstants.MAX_SYMBOLS_IN_LINE));
+            int spaceIndex = text.lastIndexOf(" ", DrawConstants.MAX_SYMBOLS_IN_LINE - 1);
+            int dotIndex = text.lastIndexOf(".", DrawConstants.MAX_SYMBOLS_IN_LINE);
+            int bracketIndex = text.lastIndexOf("(", DrawConstants.MAX_SYMBOLS_IN_LINE);
+            int dividerIndex = Math.max(spaceIndex, dotIndex);
+            dividerIndex = Math.max(dividerIndex, bracketIndex);
             if(dividerIndex > 0) {
                 lines.add(text.substring(0, dividerIndex));
                 text = text.substring(dividerIndex);

@@ -1,9 +1,9 @@
 package com.handen.easyFlowCharts.mainScreen;
 
 import com.handen.easyFlowCharts.Nodes.MethodNodeGroup;
-import com.handen.easyFlowCharts.GraphBuilder;
 import com.handen.easyFlowCharts.flowChartScreen.FlowchartController;
 import com.handen.easyFlowCharts.flowchart.FlowchartDrawer;
+import com.handen.easyFlowCharts.flowchart.GraphBuilder;
 import com.handen.easyFlowCharts.utils.FileMethodsPair;
 
 import java.awt.image.BufferedImage;

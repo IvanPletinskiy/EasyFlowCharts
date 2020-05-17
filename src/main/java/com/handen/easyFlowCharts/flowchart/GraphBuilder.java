@@ -36,7 +36,9 @@ public class GraphBuilder {
             String line = lines.get(i).trim();
             if(isLineValid(line)) {
                 if(line.equals("}")) {
-                    if(i != lines.size() - 1 && !openedNodeGroups.isEmpty()) {
+                    boolean isNotLastLine = i != lines.size() - 1;
+                    boolean isNotEmpty = !openedNodeGroups.isEmpty();
+                    if(isNotLastLine && isNotEmpty) {
                         String nextLine = lines.get(i + 1);
                         handleEndBracket(nextLine);
                     }
