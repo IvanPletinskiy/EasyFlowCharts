@@ -105,8 +105,12 @@ public class MainController implements Initializable {
         else {
             create_button.setStyle("-fx-background-color: #f44336");
         }
-        source_error_text.setVisible(!isInputValid);
-        save_error_text.setVisible(!isInputValid);
+        showErrorTexts(!isInputValid);
+    }
+
+    private void showErrorTexts(boolean isVisible) {
+        source_error_text.setVisible(isVisible);
+        save_error_text.setVisible(isVisible);
     }
 
     private void startFlowchartScene() {
