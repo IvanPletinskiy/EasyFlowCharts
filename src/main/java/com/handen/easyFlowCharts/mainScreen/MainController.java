@@ -36,6 +36,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -261,12 +262,13 @@ public class MainController implements Initializable {
         }
     }
 
-    public void OnMenuAboutClicked(ActionEvent actionEvent) {
-        //TODO
-    }
-
     public void OnMenuHelpClicked(ActionEvent actionEvent) {
-        //TODO
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        String title = "Help";
+        alert.setTitle(title);
+        alert.setContentText(helpMessage);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 
     private File chooseDirectory(String title) {
@@ -382,4 +384,7 @@ public class MainController implements Initializable {
         }
         return isValid;
     }
+
+
+    private static final String helpMessage = "Enter path to source files or to .java file. If you want to save flowChart to memory, then check save flowchart to memory and enter save path. If psth are entered correctly, then click create flowChart button.";
 }

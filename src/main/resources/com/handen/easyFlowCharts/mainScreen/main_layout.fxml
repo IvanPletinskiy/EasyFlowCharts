@@ -16,25 +16,6 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.handen.easyFlowCharts.mainScreen.MainController">
-
-    <MenuBar>
-        <!--
-        <Menu text="About">
-            <MenuItem fx:id="menu_about" onAction="#OnMenuAboutClicked" text="About">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                </accelerator>
-            </MenuItem>
-        </Menu>
-        -->
-        <Menu text="Help">
-            <MenuItem fx:id="menu_help" onAction="#OnMenuHelpClicked" text="Help">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                </accelerator>
-            </MenuItem>
-        </Menu>
-    </MenuBar>
     <VBox prefHeight="700.0" prefWidth="700.0">
         <padding>
             <Insets left="50.0" right="50.0" />
@@ -141,4 +122,15 @@
             </Label>
         </VBox>
     </VBox>
+
+    <MenuBar>
+        <Menu text="Help">
+            <MenuItem fx:id="menu_help" onAction="#OnMenuHelpClicked" text="Help">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+        </Menu>
+    </MenuBar>
+
 </AnchorPane>
